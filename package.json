@@ -1,0 +1,22 @@
+{
+  "name": "classmanagement",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajkothari634/ClassManagement.git"
+  },
+  "author": "Raj Kothari",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajkothari634/ClassManagement/issues"
+  },
+  "homepage": "https://github.com/rajkothari634/ClassManagement#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

@@ -53,6 +53,25 @@ class Instructor {
       };
     }
   }
+
+  static async checkUser(instructor_id, password) {
+    try {
+      var query = `SELECT * FROM INSTRUCTOR WHERE INSTRUCTOR_ID = ($1) AND PASSWORD = ($2) ;`;
+      const result = await pg.query(query, [instructor_id, password]);
+      if (result.rowCount === 1) {
+        return {
+          status: true,
+          data: result.rows[0],
+        };
+      } else {
+        throw Error("not found");
+      }
+    } catch (err) {
+      return {
+        status: false,
+      };
+    }
+  }
 }
 
 module.exports = Instructor;

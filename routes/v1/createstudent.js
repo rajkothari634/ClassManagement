@@ -1,10 +1,10 @@
 const Student = require("../../database/student");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const Instructor = require("../../database/instructor");
 
 exports.createStudent = async (req, res) => {
   try {
-    console.log("fkrnjn");
-    console.log(req.url);
     if (
       !req.body.student_id ||
       !req.body.name ||
@@ -15,13 +15,15 @@ exports.createStudent = async (req, res) => {
       console.log("filed missing");
       throw Error("Fields are missing");
     }
-    console.log("all");
     const isInstructor = await Instructor.findInstructorById(
       req.body.instructor_id
     );
     if (isInstructor.status == false) {
       throw Error("instructor not found");
     }
+    req.body.password = await bcrypt.hash(req.body.password, 12);
+    console.log("hash password" + " " + req.body.password);
+
     const insertResult = await Student.insert(
       req.body.student_id,
       req.body.name,
@@ -30,9 +32,21 @@ exports.createStudent = async (req, res) => {
       req.body.instructor_id
     );
     if (insertResult.status === true) {
+      //
+      const token = jwt.sign(
+        {
+          id: req.body.student_id,
+        },
+        "secret-key-needed-for-jwt-token",
+        {
+          expiresIn: "90d",
+        }
+      );
+      ///
       res.status(200).json({
         req_result: "T",
         body: insertResult.body,
+        token: token,
       });
     } else {
       throw Error(insertResult.err_code);

@@ -6,7 +6,8 @@ exports.putGrade = async (req, res) => {
     const result = await Student.putGrade(
       req.body.studentId,
       req.body.taskId,
-      req.body.marks
+      req.body.marks,
+      req.jwtId
     );
     if (result.status != true) throw Error("err updating marks");
     res.status(200).json({

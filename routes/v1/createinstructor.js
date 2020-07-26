@@ -1,19 +1,18 @@
 const Instructor = require("../../database/instructor");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 exports.createInstructor = async (req, res) => {
   try {
-    console.log("fkrnjn");
-    console.log(req.url);
     if (
       !req.body.instructor_id ||
       !req.body.name ||
       !req.body.password ||
       !req.body.level
     ) {
-      console.log("filed missing");
       throw Error("Fields are missing");
     } else {
-      console.log("all");
+      req.body.password = await bcrypt.hash(req.body.password, 12);
       const insertResult = await Instructor.insert(
         req.body.instructor_id,
         req.body.name,
@@ -21,8 +20,18 @@ exports.createInstructor = async (req, res) => {
         req.body.level
       );
       if (insertResult.status === true) {
+        const token = jwt.sign(
+          {
+            id: req.body.instructor_id,
+          },
+          "secret-key-needed-for-jwt-token",
+          {
+            expiresIn: "90d",
+          }
+        );
         res.status(200).json({
           req_result: "T",
+          token: token,
           body: insertResult.body,
         });
       } else {

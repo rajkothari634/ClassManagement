@@ -55,6 +55,33 @@ class Task {
     }
   }
 
+  static async getAllStudentByTaskId(taskId) {
+    const query = `SELECT SUB_STUDENT FROM TASK WHERE TASK_ID = ($1);`;
+    try {
+      console.log("fdf");
+      console.log(taskId);
+      const result = await pg.query(query, [taskId]);
+      if (result.rowCount > 0) {
+        var temp = result.rows[0].sub_student;
+        var stuArray = [];
+        for (var i = 0; i < temp.length; i++) {
+          stuArray.push(temp[i].student_id);
+        }
+        return {
+          status: true,
+          data: stuArray,
+        };
+      }
+      console.log(result.rowCount);
+      throw Error("not able to find task");
+    } catch (err) {
+      console.log(err);
+      return {
+        status: false,
+      };
+    }
+  }
+
   static async updateTaskStudentList(studentId, taskId) {
     try {
       var task_stu_obj = [];

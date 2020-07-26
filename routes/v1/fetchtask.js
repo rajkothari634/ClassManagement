@@ -2,9 +2,11 @@ const Task = require("../../database/task");
 
 exports.fetchAllTask = async (req, res) => {
   try {
-    if (!req.query.instructorId || !req.query.level) {
+    if ((!req.query.instructorId && !req.jwtId) || !req.query.level) {
       throw Error("missing Fields");
     }
+    req.query.instructorId = req.jwtId;
+
     const result = await Task.getAllTaskByInstructorId(
       req.query.instructorId,
       req.query.level
@@ -20,7 +22,7 @@ exports.fetchAllTask = async (req, res) => {
       req_result: "F",
       error_info: {
         err_code: 400,
-        err_text: err,
+        err_text: err.Error,
       },
     });
   }

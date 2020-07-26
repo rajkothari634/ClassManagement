@@ -2,6 +2,7 @@ const Student = require("../../database/student");
 
 exports.getGrades = async (req, res) => {
   try {
+    req.query.studentId = req.jwtId;
     const result = await Student.getGrade(req.query.studentId);
     if (result.status == false) throw Error("student not found");
     res.status(200).json({

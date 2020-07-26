@@ -6,6 +6,7 @@ require("dotenv").config({ path: `${__dirname}/config.env` });
 
 exports.createTask = async (req, res) => {
   try {
+    req.body.instructorId = req.jwtId;
     const encoded = req.file.buffer.toString("base64");
     let options = {
       key: "38fa6122d68d5de7b0076375dcd96148",
@@ -24,8 +25,9 @@ exports.createTask = async (req, res) => {
       throw Error("not able to upload image");
     }
     console.log(imgUpload.data.image.url);
+
     const insertResult = await Task.insert(
-      req.body.instructorId,
+      req.body.jwtId,
       imgUpload.data.image.url,
       req.body.explanation,
       req.body.level

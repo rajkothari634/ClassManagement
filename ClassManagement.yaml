@@ -1,0 +1,213 @@
+paths:
+  /createstudent:
+    post:
+      parameter:
+        - in: body
+          name: student_id
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: name
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: instructor_id
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: level
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: password
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "400":
+          description: failure
+  /createinstructor:
+    post:
+      parameter:
+        - in: body
+          name: instructor_id
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: name
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: level
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: password
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "400":
+          description: failure
+  /getAllTask:
+    get:
+      parameter:
+        - in: query
+          name: level
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: instructor_id
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "400":
+          description: failure
+  /createtask:
+    post:
+      parameter:
+        - in: form-data
+          name: image
+          required: true
+          schema:
+            type: file
+        - in: form-data
+          name: instructor_id
+          required: false
+          schema:
+            type: string
+        - in: form-data
+          name: explanation
+          required: true
+          schema:
+            type: string
+        - in: form-data
+          name: level
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "400":
+          description: failure
+  /submitTask:
+    post:
+      parameter:
+        - in: form-data
+          name: image
+          required: true
+          schema:
+            type: file
+        - in: form-data
+          name: task_id
+          required: true
+          schema:
+            type: string
+        - in: form-data
+          name: student_id
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "400":
+          description: failure
+  /stuTaskPerformance:
+    post:
+      parameter:
+        - in: body
+          name: task_id
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: instructor_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "400":
+          description: failure
+  /putGrade:
+    post:
+      parameter:
+        - in: body
+          name: student_id
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: marks
+          required: true
+          schema:
+            type: integer
+        - in: body
+          name: task_id
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: instructor_id
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "400":
+          description: failure
+  /getGrade:
+    get:
+      parameter:
+        - in: query
+          name: studentId
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "400":
+          description: failure
+  /login:
+    post:
+      parameter:
+        - in: body
+          name: type
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: password
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: success
+        "400":
+          description: failure

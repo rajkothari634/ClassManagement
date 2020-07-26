@@ -41,7 +41,7 @@ class Task {
     const query = `SELECT TASK_ID , IMAGEURL , EXPLANATION , LEVEL FROM TASK WHERE INSTRUCTOR_ID = $1 AND LEVEL = $2 ;`;
     try {
       const result = await pg.query(query, [instructorId, level]);
-      if (result.rowCount >= 0) {
+      if (result.rowCount > 0) {
         return {
           status: true,
           data: result,
@@ -55,12 +55,12 @@ class Task {
     }
   }
 
-  static async getAllStudentByTaskId(taskId) {
-    const query = `SELECT SUB_STUDENT FROM TASK WHERE TASK_ID = ($1);`;
+  static async getAllStudentByTaskId(taskId, id) {
+    const query = `SELECT SUB_STUDENT FROM TASK WHERE TASK_ID = ($1) AND INSTRUCTOR_ID = ($2);`;
     try {
       console.log("fdf");
       console.log(taskId);
-      const result = await pg.query(query, [taskId]);
+      const result = await pg.query(query, [taskId, id]);
       if (result.rowCount > 0) {
         var temp = result.rows[0].sub_student;
         var stuArray = [];

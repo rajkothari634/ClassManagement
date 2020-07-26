@@ -4,7 +4,10 @@ const Task = require("../../database/task");
 exports.StudentTaskPerformance = async (req, res) => {
   try {
     console.log(req.body.taskId);
-    var studentlistresult = await Task.getAllStudentByTaskId(req.body.taskId);
+    var studentlistresult = await Task.getAllStudentByTaskId(
+      req.body.taskId,
+      req.jwtId
+    );
     if (studentlistresult.status == true) {
       var studentArray = studentlistresult.data;
       console.log(studentArray);

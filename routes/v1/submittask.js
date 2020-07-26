@@ -7,8 +7,10 @@ require("dotenv").config({ path: `${__dirname}/config.env` });
 
 exports.submitTask = async (req, res) => {
   try {
-    if (!req.body.taskId || !req.body.studentId) throw Error("missing fields");
+    if (!req.body.taskId || (!req.body.studentId && !req.jwtId))
+      throw Error("missing fields");
     const encoded = req.file.buffer.toString("base64");
+    req.body.studentId = req.jwtId;
     let options = {
       key: "38fa6122d68d5de7b0076375dcd96148",
       image: encoded,

@@ -95,12 +95,12 @@ class Student {
     }
   }
 
-  static async putGrade(studentId, taskId, marks) {
+  static async putGrade(studentId, taskId, marks, id) {
     try {
       var stu_task_obj = [];
       console.log("sfs" + studentId);
-      var query = `SELECT STUDENT_TASK FROM STUDENT WHERE STUDENT_ID = $1;`;
-      const result = await pg.query(query, [studentId]);
+      var query = `SELECT STUDENT_TASK FROM STUDENT WHERE STUDENT_ID = $1 AND INSTRUCTOR_ID = ($2);`;
+      const result = await pg.query(query, [studentId, id]);
       if (!result.rows[0].student_task) throw Error("could not find task");
       else {
         var tempObj = result.rows[0].student_task;
@@ -140,6 +140,25 @@ class Student {
         status: true,
         data: result.rows[0].student_task,
       };
+    } catch (err) {
+      return {
+        status: false,
+      };
+    }
+  }
+
+  static async checkUser(student_id, password) {
+    try {
+      var query = `SELECT * FROM STUDENT WHERE STUDENT_ID = ($1) AND PASSWORD = ($2) ;`;
+      const result = await pg.query(query, [student_id, password]);
+      if (result.rowCount === 1) {
+        return {
+          status: true,
+          data: result.rows[0],
+        };
+      } else {
+        throw Error("not found");
+      }
     } catch (err) {
       return {
         status: false,

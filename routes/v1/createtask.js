@@ -24,7 +24,6 @@ exports.createTask = async (req, res) => {
     if (imgUpload.status !== 200) {
       throw Error("not able to upload image");
     }
-    console.log(imgUpload.data.image.url);
 
     const insertResult = await Task.insert(
       req.body.instructorId,
@@ -44,15 +43,12 @@ exports.createTask = async (req, res) => {
       });
       return;
     }
-    throw Error("not able to put the task");
+    throw Error(insertResult.err_code);
   } catch (err) {
     console.log(err);
     res.status(400).json({
       req_result: "F",
-      error_info: {
-        error_code: 400,
-        error_text: err,
-      },
+      err_text: err.message,
     });
   }
 };

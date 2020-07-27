@@ -12,7 +12,6 @@ exports.createStudent = async (req, res) => {
       !req.body.level ||
       !req.body.instructor_id
     ) {
-      console.log("filed missing");
       throw Error("Fields are missing");
     }
     const isInstructor = await Instructor.findInstructorById(
@@ -22,7 +21,6 @@ exports.createStudent = async (req, res) => {
       throw Error("instructor not found");
     }
     req.body.password = await bcrypt.hash(req.body.password, 12);
-    console.log("hash password" + " " + req.body.password);
 
     const insertResult = await Student.insert(
       req.body.student_id,
@@ -37,6 +35,7 @@ exports.createStudent = async (req, res) => {
         {
           id: req.body.student_id,
           other_id: req.body.instructor_id,
+          type: "student",
         },
         "secret-key-needed-for-jwt-token",
         {
@@ -58,13 +57,9 @@ exports.createStudent = async (req, res) => {
       throw Error(insertResult.err_code);
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       req_result: "F",
-      error_info: {
-        error_code: 400,
-        error_text: err,
-      },
+      err_text: err.message,
     });
   }
 };

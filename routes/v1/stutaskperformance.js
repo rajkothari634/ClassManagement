@@ -4,9 +4,10 @@ const Task = require("../../database/task");
 exports.StudentTaskPerformance = async (req, res) => {
   try {
     console.log(req.body.taskId);
+
     var studentlistresult = await Task.getAllStudentByTaskId(
       req.body.taskId,
-      req.jwtId
+      req.body.studentId
     );
     if (studentlistresult.status == true) {
       var studentArray = studentlistresult.data;
@@ -37,9 +38,7 @@ exports.StudentTaskPerformance = async (req, res) => {
     console.log(err);
     res.status(400).json({
       req_result: "F",
-      error_info: {
-        err_txt: err,
-      },
+      err_text: err.message,
     });
   }
 };

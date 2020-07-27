@@ -13,15 +13,20 @@ exports.login = async (req, res) => {
       result = await Student.checkUser(req.body.id, req.body.password);
     }
     if (result.status == true) {
-      const token = jwt.sign(
-        {
+      var object;
+      if (req.body.type == "instructor") {
+        object = {
           id: req.body.id,
-        },
-        "secret-key-needed-for-jwt-token",
-        {
-          expiresIn: "90d",
-        }
-      );
+        };
+      } else {
+        object = {
+          id: req.body.id,
+          other_id: result.body.instructor_id,
+        };
+      }
+      const token = jwt.sign(object, "secret-key-needed-for-jwt-token", {
+        expiresIn: "90d",
+      });
       res.status(200).json({
         result: true,
         token: token,

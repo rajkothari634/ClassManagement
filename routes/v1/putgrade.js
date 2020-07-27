@@ -9,19 +9,15 @@ exports.putGrade = async (req, res) => {
       req.body.marks,
       req.jwtId
     );
-    if (result.status != true) throw Error("err updating marks");
+    if (result.status != true) throw Error("Err Updating Marks");
     res.status(200).json({
       req_result: "T",
       data: result.data,
     });
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       req_result: "F",
-      err_info: {
-        err_code: 400,
-        err_txt: err,
-      },
+      err_text: err.message,
     });
   }
 };

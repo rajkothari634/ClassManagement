@@ -4,7 +4,7 @@ exports.getGrades = async (req, res) => {
   try {
     req.query.studentId = req.jwtId;
     const result = await Student.getGrade(req.query.studentId);
-    if (result.status == false) throw Error("student not found");
+    if (result.status == false) throw Error("Student Not Found");
     res.status(200).json({
       req_result: "T",
       data: result.data,
@@ -13,10 +13,7 @@ exports.getGrades = async (req, res) => {
     console.log(err);
     res.status(400).json({
       req_result: "F",
-      error_info: {
-        err_code: 400,
-        err_text: err,
-      },
+      err_text: err.message,
     });
   }
 };

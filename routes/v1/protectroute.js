@@ -5,9 +5,7 @@ const { promisify } = require("util");
 
 exports.protect = async (req, res, next) => {
   try {
-    console.log("inside protect");
     let token;
-    console.log(req.url);
     if (req.headers.authorization) {
       token = req.headers.authorization;
     } else {
@@ -18,17 +16,28 @@ exports.protect = async (req, res, next) => {
       token,
       "secret-key-needed-for-jwt-token"
     );
-    console.log(decoded);
     req.jwtId = decoded.id;
     req.otherId = decoded.other_id;
-    next();
+    req.routeType = decoded.type;
+    if (
+      (decoded.type == "instructor" &&
+        (req.url == "/createtask" ||
+          req.url == "/getAllTask" ||
+          req.url == "/stuTaskPerformance" ||
+          req.url == "/putGrade")) ||
+      (decoded.type == "student" &&
+        (req.url == "/getAllTask" ||
+          req.url == "/getGrade" ||
+          req.url == "/submitTask"))
+    ) {
+      next();
+    } else {
+      throw Error("Login Please");
+    }
   } catch (err) {
     res.status(400).json({
       req_result: "F",
-      err_info: {
-        err_code: 400,
-        err_txt: "Login Required",
-      },
+      err_text: err.message,
     });
   }
 };

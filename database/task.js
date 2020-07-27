@@ -28,11 +28,12 @@ class Task {
           body: result,
         };
       }
-      throw Error("not successful");
+      throw Error("Task Creation Failed");
     } catch (err) {
       console.log(err);
       return {
         status: false,
+        err_code: err.message,
       };
     }
   }
@@ -47,10 +48,11 @@ class Task {
           data: result,
         };
       }
-      throw Error("not able to find task");
+      throw Error("Task Not Found");
     } catch (err) {
       return {
         status: false,
+        err_code: err.message,
       };
     }
   }
@@ -58,8 +60,6 @@ class Task {
   static async getAllStudentByTaskId(taskId, id) {
     const query = `SELECT SUB_STUDENT FROM TASK WHERE TASK_ID = ($1) AND INSTRUCTOR_ID = ($2);`;
     try {
-      console.log("fdf");
-      console.log(taskId);
       const result = await pg.query(query, [taskId, id]);
       if (result.rowCount > 0) {
         var temp = result.rows[0].sub_student;
@@ -72,12 +72,12 @@ class Task {
           data: stuArray,
         };
       }
-      console.log(result.rowCount);
-      throw Error("not able to find task");
+      throw Error("Task Not Found");
     } catch (err) {
       console.log(err);
       return {
         status: false,
+        err_code: err.message,
       };
     }
   }
@@ -87,12 +87,12 @@ class Task {
       var task_stu_obj = [];
       var query = `SELECT SUB_STUDENT FROM TASK WHERE TASK_ID = ($1);`;
       const result = await pg.query(query, [taskId]);
+      if (result.rowCount == 0) throw Error("Task Not Found");
       if (!result.rows[0].sub_student)
         task_stu_obj.push({
           student_id: studentId,
         });
       else {
-        console.log("ecggv");
         var tempObj = result.rows[0].sub_student;
         for (let index = 0; index < tempObj.length; index++) {
           task_stu_obj.push(tempObj[index]);
@@ -113,6 +113,7 @@ class Task {
     } catch (err) {
       return {
         status: false,
+        err_code: err.message,
       };
     }
   }

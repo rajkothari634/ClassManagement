@@ -23,6 +23,7 @@ exports.createInstructor = async (req, res) => {
         const token = jwt.sign(
           {
             id: req.body.instructor_id,
+            type: "instructor",
           },
           "secret-key-needed-for-jwt-token",
           {
@@ -43,13 +44,10 @@ exports.createInstructor = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     res.status(400).json({
       req_result: "F",
-      error_info: {
-        error_code: 400,
-        error_text: err,
-      },
+      err_text: err.message,
     });
   }
 };

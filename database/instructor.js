@@ -20,11 +20,11 @@ class Instructor {
         password,
         level,
       ]);
-      console.log(result + "fff");
+      console.log(result);
       if (result.rowCount === 1) {
         return {
           status: true,
-          body: result,
+          body: result.rows,
         };
       } else {
         throw Error(result);

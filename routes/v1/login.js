@@ -17,11 +17,13 @@ exports.login = async (req, res) => {
       if (req.body.type == "instructor") {
         object = {
           id: req.body.id,
+          type: "instructor",
         };
       } else {
         object = {
           id: req.body.id,
           other_id: result.body.instructor_id,
+          type: "student",
         };
       }
       const token = jwt.sign(object, "secret-key-needed-for-jwt-token", {
@@ -32,16 +34,13 @@ exports.login = async (req, res) => {
         token: token,
       });
     } else {
-      throw Error("user not found");
+      throw Error("User Not Found");
     }
   } catch (err) {
     console.log(err);
     res.status(400).json({
-      req_result: false,
-      err_info: {
-        err_code: 400,
-        err_txt: err,
-      },
+      req_result: "F",
+      err_text: err.message,
     });
   }
 };

@@ -13,26 +13,24 @@ class Instructor {
             nextval('INSTRUCTOR_SEQ_NO'),$1,$2,$3,$4
         );`;
     try {
-      console.log("database student started");
       const result = await pg.query(query, [
         instructor_id,
         name,
         password,
         level,
       ]);
-      console.log(result);
       if (result.rowCount === 1) {
         return {
           status: true,
           body: result.rows,
         };
       } else {
-        throw Error(result);
+        throw Error("Insertion Failed");
       }
     } catch (err) {
       return {
         status: false,
-        err_code: err,
+        err_code: err.message,
       };
     }
   }

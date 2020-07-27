@@ -14,7 +14,6 @@ class Student {
             nextval('STUDENT_SEQ_NO'),$1,$2,$3,$4,$5
         );`;
     try {
-      console.log("database student started");
       const result = await pg.query(query, [
         student_id,
         name,
@@ -34,7 +33,7 @@ class Student {
     } catch (err) {
       return {
         status: false,
-        err_code: err,
+        err_code: err.message,
       };
     }
   }
@@ -68,6 +67,7 @@ class Student {
       console.log(err);
       return {
         status: false,
+        err_code: err.message,
       };
     }
   }
@@ -91,6 +91,7 @@ class Student {
     } catch (err) {
       return {
         status: false,
+        err_code: err.message,
       };
     }
   }
@@ -123,10 +124,9 @@ class Student {
         data: sub_task_result.rows,
       };
     } catch (err) {
-      console.log(err);
       return {
         status: false,
-        err_code: err,
+        err_code: err.message,
       };
     }
   }
@@ -143,6 +143,7 @@ class Student {
     } catch (err) {
       return {
         status: false,
+        err_code: err.message,
       };
     }
   }

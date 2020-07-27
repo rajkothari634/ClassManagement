@@ -32,7 +32,11 @@ exports.createInstructor = async (req, res) => {
         res.status(200).json({
           req_result: "T",
           token: token,
-          body: insertResult.body,
+          body: {
+            instructor_id: req.body.instructor_id,
+            name: req.body.name,
+            level: req.body.level,
+          },
         });
       } else {
         throw Error(insertResult.err_code);

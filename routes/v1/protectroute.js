@@ -7,6 +7,7 @@ exports.protect = async (req, res, next) => {
   try {
     console.log("inside protect");
     let token;
+    console.log(req.url);
     if (req.headers.authorization) {
       token = req.headers.authorization;
     } else {
@@ -19,6 +20,7 @@ exports.protect = async (req, res, next) => {
     );
     console.log(decoded);
     req.jwtId = decoded.id;
+    req.otherId = decoded.other_id;
     next();
   } catch (err) {
     res.status(400).json({

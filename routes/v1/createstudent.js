@@ -36,6 +36,7 @@ exports.createStudent = async (req, res) => {
       const token = jwt.sign(
         {
           id: req.body.student_id,
+          other_id: req.body.instructor_id,
         },
         "secret-key-needed-for-jwt-token",
         {
@@ -45,7 +46,12 @@ exports.createStudent = async (req, res) => {
       ///
       res.status(200).json({
         req_result: "T",
-        body: insertResult.body,
+        body: {
+          student_id: req.body.student_id,
+          name: req.body.name,
+          instructor_id: req.body.instructor_id,
+          level: req.body.level,
+        },
         token: token,
       });
     } else {

@@ -27,7 +27,7 @@ exports.createTask = async (req, res) => {
     console.log(imgUpload.data.image.url);
 
     const insertResult = await Task.insert(
-      req.body.jwtId,
+      req.body.instructorId,
       imgUpload.data.image.url,
       req.body.explanation,
       req.body.level
@@ -35,6 +35,12 @@ exports.createTask = async (req, res) => {
     if (insertResult.status == true) {
       res.status(200).json({
         req_result: true,
+        body: {
+          task_id: req.body.instructorId,
+          imgUrl: imgUpload.data.image.url,
+          explanation: req.body.explanation,
+          level: req.body.level,
+        },
       });
       return;
     }

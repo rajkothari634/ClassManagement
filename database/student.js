@@ -22,11 +22,11 @@ class Student {
         level,
         instructor,
       ]);
-      console.log(result + "fff");
+      console.log(result.rows);
       if (result.rowCount === 1) {
         return {
           status: true,
-          body: result,
+          body: result.rows,
         };
       } else {
         throw Error(result);
@@ -39,11 +39,11 @@ class Student {
     }
   }
 
-  static async submitTask(newTaskJson, student_id) {
+  static async submitTask(newTaskJson, student_id, instructor_id) {
     try {
       var stu_task_obj = [];
-      var query = `SELECT STUDENT_TASK FROM STUDENT WHERE STUDENT_ID = $1;`;
-      const result = await pg.query(query, [student_id]);
+      var query = `SELECT STUDENT_TASK FROM STUDENT WHERE STUDENT_ID = $1 AND INSTRUCTOR_ID = $2;`;
+      const result = await pg.query(query, [student_id, instructor_id]);
       if (!result.rows[0].student_task) stu_task_obj.push(newTaskJson);
       else {
         var tempObj = result.rows[0].student_task;

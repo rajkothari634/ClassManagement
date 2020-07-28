@@ -2,6 +2,7 @@ const Student = require("../../database/student");
 const Instructor = require("../../database/instructor");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const envJson = require("dotenv").config();
 
 exports.login = async (req, res) => {
   try {
@@ -26,8 +27,8 @@ exports.login = async (req, res) => {
           type: "student",
         };
       }
-      const token = jwt.sign(object, "secret-key-needed-for-jwt-token", {
-        expiresIn: "90d",
+      const token = jwt.sign(object, `${envJson.parsed.JWT_SECRET}`, {
+        expiresIn: `${envJson.parsed.JWT_EXPIRES_IN}`,
       });
       res.status(200).json({
         result: true,

@@ -3,7 +3,7 @@ const Task = require("../../database/task");
 const req = require("postman-request");
 const util = require("util");
 const reqPost = util.promisify(req.post);
-require("dotenv").config({ path: `${__dirname}/config.env` });
+const envJson = require("dotenv").config();
 
 exports.submitTask = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ exports.submitTask = async (req, res) => {
     const encoded = req.file.buffer.toString("base64");
     req.body.studentId = req.jwtId;
     let options = {
-      key: "38fa6122d68d5de7b0076375dcd96148",
+      key: `${envJson.parsed.API_KEY}`,
       image: encoded,
     };
     let imgUpload = await reqPost({

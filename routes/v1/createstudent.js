@@ -2,6 +2,7 @@ const Student = require("../../database/student");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Instructor = require("../../database/instructor");
+const envJson = require("dotenv").config();
 
 exports.createStudent = async (req, res) => {
   try {
@@ -37,9 +38,9 @@ exports.createStudent = async (req, res) => {
           other_id: req.body.instructor_id,
           type: "student",
         },
-        "secret-key-needed-for-jwt-token",
+        `${envJson.parsed.JWT_SECRET}`,
         {
-          expiresIn: "90d",
+          expiresIn: `${envJson.parsed.JWT_EXPIRES_IN}`,
         }
       );
       ///

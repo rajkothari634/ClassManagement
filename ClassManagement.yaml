@@ -211,3 +211,9 @@ paths:
           description: success
         "400":
           description: failure
+
+errorResponse:
+  status: 400
+  parameter:
+    req_result: 400
+    err_text: describing the error whatever it is

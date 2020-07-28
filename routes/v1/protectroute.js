@@ -1,5 +1,5 @@
 const { JsonWebTokenError } = require("jsonwebtoken");
-
+const envJson = require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 
@@ -14,7 +14,7 @@ exports.protect = async (req, res, next) => {
     //verify token
     const decoded = await promisify(jwt.verify)(
       token,
-      "secret-key-needed-for-jwt-token"
+      `${envJson.parsed.JWT_SECRET}`
     );
     req.jwtId = decoded.id;
     req.otherId = decoded.other_id;

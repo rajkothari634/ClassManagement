@@ -1,7 +1,9 @@
 const Instructor = require("../../database/instructor");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const envJson = require("dotenv").config();
 
+console.log(envJson.parsed.API_KEY);
 exports.createInstructor = async (req, res) => {
   try {
     if (
@@ -25,9 +27,9 @@ exports.createInstructor = async (req, res) => {
             id: req.body.instructor_id,
             type: "instructor",
           },
-          "secret-key-needed-for-jwt-token",
+          `${envJson.parsed.JWT_SECRET}`,
           {
-            expiresIn: "90d",
+            expiresIn: `${envJson.parsed.JWT_EXPIRES_IN}`,
           }
         );
         res.status(200).json({

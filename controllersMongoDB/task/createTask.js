@@ -4,7 +4,11 @@ const Instructor = require("../../databaseMongo/instructor");
 exports.createTask = async (req,res) => {
     let errorCode = 500;
     try {
+        console.log(req.body.explanation);
+        console.log(req.file)
         let body = req.body;
+        body.endDate = new Date(body.endDate);
+        console.log(body.endDate)
         let instructorId = req.body.instructorId;
         if(!isValid(body,req.file)){
             errorCode = 400
@@ -18,7 +22,7 @@ exports.createTask = async (req,res) => {
                 res.status(200).json({
                     status: true,
                     data: {
-                        task: task
+                        task: taskDetail.task
                     }
                 })
             }else{
@@ -47,5 +51,6 @@ const isValid = (body,file) => {
     if(file === undefined || file === null || file.buffer === undefined || file.buffer === null){
         return false
     }
+
     return true
 }

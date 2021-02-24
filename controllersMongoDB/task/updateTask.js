@@ -3,8 +3,12 @@ const Task = require("../../databaseMongo/task")
 exports.updateTask = async (req,res) => {
     let errorCode = 500
     try {
-        let taskId = req.body.updatingTaskId;
-        let updatingbody = validObject(req.body.updatingBody,req.file);
+        let taskId = req.body.taskId;
+        console.log(req.body)
+        if(taskId===undefined || taskId===null){
+            throw Error("Provide task Id");
+        }
+        let updatingbody = validObject(req.body,req.file);
         const result = await Task.updateTask(taskId,updatingbody);
         if(result.status){
             res.status(200).json({

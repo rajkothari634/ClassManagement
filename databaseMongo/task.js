@@ -32,6 +32,8 @@ exports.updateTask = async (taskId,updatedBody) => {
             }
         }
         const result = await Task.findByIdAndUpdate(taskId,updatedBody,{new: true});
+      console.log("updating")
+       console.log(result)
         return {
             status : true,
             task: result

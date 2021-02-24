@@ -11,7 +11,7 @@ const GetAllStudent = require("../../controllersMongoDB/instructor/getAllStudent
 const GetInstructor = require("../../controllersMongoDB/instructor/getInstructor");
 
 router.post("/createInstructor", CreateInstructor.createInstructor);
-router.get("/getAllInstructor", GetAllInstructor.getAllInstructor)
+router.post("/getAllInstructor", GetAllInstructor.getAllInstructor)
 router.get("/getAllTask",GetAllTask.getAllTask);
 router.get("/getAllStudent", GetAllStudent.getAllStudent);
 router.get("/getInstructor",GetInstructor.getInstructor);

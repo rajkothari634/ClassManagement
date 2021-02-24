@@ -42,7 +42,7 @@ exports.updateSubmission = async (submissionId,imageData,taskId) => {
             submission = await Submission.findById(submissionId);
             taskId = submission.taskId;
         }
-        if(!isAccepting(taskId)){
+        if(!Task.isAccepting(taskId)){
             return {
                 status: false,
                 errorMessage: "Submission date passed."

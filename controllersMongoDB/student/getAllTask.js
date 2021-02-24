@@ -5,9 +5,12 @@ exports.getAllTask = async (req,res) => {
     let errorCode = 500
     try {
         const studentId = req.query["studentId"];
-        const student = await Student.findStudentById(studentId);
-        const instructorArray = student.instructorIds;
-        const submissionArray = student.submissionIds;
+        const studentDetail = await Student.findStudentById(studentId);
+        if(!studentDetail.status){
+            throw Error("student not found")
+        }
+        const instructorArray = studentDetail.student.instructorIds;
+        const submissionArray = studentDetail.student.submissionIds;
         let taskIdArray = []
         for(let i=0; i<instructorArray.length; i++){
             for(let j=0;j<instructorArray[i].taskIds.length;j++){
@@ -28,10 +31,11 @@ exports.getAllTask = async (req,res) => {
         res.status(200).json({
             status: true,
             data: {
-                taskArray: taskArray
+                taskHashMap: taskArray
             }
         })
     } catch (err) {
+        console.log(err)
         res.status(errorCode).json({
             errorText: err.message,
             status: false,

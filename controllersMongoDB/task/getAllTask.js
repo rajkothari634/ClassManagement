@@ -31,16 +31,11 @@ exports.getAllTask = async (req,res) => {
 }
 const extractQueryObject = (query) => {
     let queryObject = {};
-    if(query["email"]!==undefined || query["email"] !== null){
-        queryObject["email"] = query["email"]
+
+    if(query["taskIds"]!==undefined && query["taskIds"] !== null){
+        queryObject["taskId"] =  { $all: query["taskIds"] } 
     }
-    if(query["instructorName"]!==undefined || query["instructorName"] !== null){
-        queryObject["instructorName"] = query["instructorName"]
-    }
-    if(query["taskIds"]!==undefined || query["taskIds"] !== null){
-        queryObject["taskIds"] =  { $all: query["taskIds"] } 
-    }
-    if(query["studentIds"]!==undefined || query["studentIds"] !== null){
+    if(query["studentIds"]!==undefined && query["studentIds"] !== null){
         queryObject["studentIds"] = { $all: query["studentIds"] }
     }
     return queryObject

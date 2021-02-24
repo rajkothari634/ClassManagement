@@ -3,7 +3,7 @@ const Instructor = require("../../databaseMongo/instructor");
 exports.getAllInstructor = async (req,res) => {
     let errorCode = 500;
     try {
-        const query = req.query;
+        const query = req.body;
         const queryObject = extractQueryObject(query);
         console.log("finding instructor")
         console.log(queryObject)

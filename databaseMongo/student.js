@@ -1,4 +1,6 @@
 const Student = require("../dbSchemaMongo/studentModel");
+const bcrypt = require('bcrypt');
+const CreateJWT = require("../helper/jwToken/createJWToken")
 
 exports.createStudent = async (body) => {
     try {
@@ -17,12 +19,16 @@ exports.createStudent = async (body) => {
 }
 
 const encodePassword = async (password) => {
-    return password
+    return await bcrypt.hash(password, 12);
 }
+const comparePassword = async (correctPassword,providedPassword) => {
+    return await bcrypt.compare(providedPassword,correctPassword);
+}
+
 
 exports.findStudentById = async (id) => {
     try {
-        const student = await Student.findById(id).populate("instructorIds","-password").populate("submissionIds");
+        const student = await Student.findById(id,"-password").populate("instructorIds","-password").populate("submissionIds");
         if(student){
             return {
                 status: true,
@@ -43,7 +49,7 @@ exports.findStudentById = async (id) => {
 
 exports.findStudent = async (query) => {
     try {
-        const studentArray = await Student.find(query);
+        const studentArray = await Student.find(query,"-password");
         return {
             status: true,
             studentArray: studentArray
@@ -121,6 +127,41 @@ exports.insertInstructorId  = async (studentId,instructorId) => {
                 status: true,
                 updated: updatedStudent
             }
+        }
+    } catch (err) {
+        return {
+            status: false,
+            errorMessage: err.message
+        }
+    }
+}
+
+exports.login = async (email,password) => {
+    try {
+        const studentArray = await Student.find({email:email});
+        let student = studentArray[0]
+        if(student===undefined || student===null){
+            throw Error("Student not found")
+        }
+        let passwordStatus = await comparePassword( student.password ,password);
+        if(passwordStatus){
+            let jwToken = await CreateJWT.createJWToken({
+                email: student.email,
+                id: student.id,
+                role: "student"
+            })
+            return {
+                status: true,
+                user:{
+                    _id: student._id,
+                    role: "student",
+                    name: student.studentName,
+                    email: student.email,
+                    jwToken: jwToken.jwToken
+                }
+            }
+        }else{
+            throw Error("password is wrong")
         }
     } catch (err) {
         return {

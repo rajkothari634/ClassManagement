@@ -1,5 +1,5 @@
 const Task = require("../dbSchemaMongo/taskModel");
-const GetImageUrl = require("../imgb/getImageUrl");
+const GetImageUrl = require("../helper/imgb/getImageUrl");
 
 exports.createTask = async (body,imageData) => {
     try {

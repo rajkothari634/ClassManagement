@@ -1,6 +1,6 @@
 const Student = require("../../databaseMongo/student");
 const Task = require("../../databaseMongo/task");
-
+const ExtractTask = require("../../helper/extractTask");
 exports.getAllTask = async (req,res) => {
     let errorCode = 500
     try {
@@ -9,31 +9,19 @@ exports.getAllTask = async (req,res) => {
         if(!studentDetail.status){
             throw Error("student not found")
         }
-        const instructorArray = studentDetail.student.instructorIds;
-        const submissionArray = studentDetail.student.submissionIds;
-        let taskIdArray = []
-        for(let i=0; i<instructorArray.length; i++){
-            for(let j=0;j<instructorArray[i].taskIds.length;j++){
-                taskIdArray.push(instructorArray[i].taskIds[j]);
-            }
+        let taskHashMapDetail = await ExtractTask.extractTask(studentDetail.student);
+        if(taskHashMapDetail.status){
+            res.status(200).json({
+                status: true,
+                data: {
+                    taskHashMap: taskHashMapDetail.taskHashMap
+                }
+            })
+        }else{
+            errorCode = 404;
+            throw Error("task not found")
         }
-        let taskArray = {}
-        for(let i=0;i<taskIdArray.length;i++){
-            let taskDetail = await Task.getTaskById(taskIdArray[i]);
-            if(taskDetail.status){
-                taskArray[taskDetail.task._id] = taskDetail.task;
-                taskArray[taskDetail.task._id].completed = false;
-            }
-        }
-        for(let j=0;j<submissionArray.length; j++){
-            taskArray[submissionArray[i].taskId].completed = true;
-        }
-        res.status(200).json({
-            status: true,
-            data: {
-                taskHashMap: taskArray
-            }
-        })
+
     } catch (err) {
         console.log(err)
         res.status(errorCode).json({

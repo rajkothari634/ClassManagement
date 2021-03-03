@@ -1,5 +1,5 @@
 const Submission = require("../dbSchemaMongo/submissionModel");
-const GetImageUrl = require("../imgb/getImageUrl");
+const GetImageUrl = require("../helper/imgb/getImageUrl");
 const Task = require("./task");
 const Student = require("./student");
 

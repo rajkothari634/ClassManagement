@@ -1,5 +1,6 @@
 const Instructor = require("../dbSchemaMongo/instructorModel");
 const bcrypt = require("bcrypt");
+const CreateJWT = require("../helper/jwToken/createJWToken");
 
 exports.createInstructor = async (body) => {
     try {
@@ -19,6 +20,11 @@ exports.createInstructor = async (body) => {
 
 const encodePassword = async (password) => {
     return await bcrypt.hash(password, 12);
+}
+const comparePassword = async (correctPassword,providedPassword) => {
+    console.log(correctPassword);
+    console.log(providedPassword)
+    return await bcrypt.compare(providedPassword,correctPassword);
 }
 
 exports.findInstructorById = async (id) => {
@@ -122,6 +128,43 @@ exports.insertStudentId  = async (studentId,instructorId) => {
                 status: true,
                 updated: updatedInstructor
             }
+        }
+    } catch (err) {
+        return {
+            status: false,
+            errorMessage: err.message
+        }
+    }
+}
+
+exports.login = async (email,password) => {
+    try {
+        const instructorArray = await Instructor.find({email:email});
+        let instructor = instructorArray[0]
+        if(instructor===undefined || instructor===null){
+            throw Error("Instructor not found")
+        }
+        let passwordStatus = await comparePassword(instructor.password,password);
+        console.log("password status is required")
+        console.log(passwordStatus)
+        if(passwordStatus){
+            let jwToken = await CreateJWT.createJWToken({
+                email: instructor.email,
+                id: instructor.id,
+                role: "instructor"
+            })
+            return {
+                status: true,
+                user:{
+                    _id: instructor._id,
+                    role: "instructor",
+                    name: instructor.instructorName,
+                    email: instructor.email,
+                    jwToken: jwToken.jwToken
+                }
+            }
+        }else{
+            throw Error("password is wrong")
         }
     } catch (err) {
         return {

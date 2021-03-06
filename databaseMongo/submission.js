@@ -48,7 +48,11 @@ exports.updateSubmission = async (submissionId,imageData,taskId) => {
                 errorMessage: "Submission date passed."
             }
         }
-        const result = await Submission.findByIdAndUpdate(submissionId,imageUrl,{new:true});
+        const result = await Submission.findByIdAndUpdate(submissionId,{
+            imageUrl: imageUrl
+        },{new:true});
+        console.log("submission completed you can check")
+        console.log(result)
         return {
             status: true,
             submission: result

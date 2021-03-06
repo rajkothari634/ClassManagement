@@ -13,8 +13,8 @@ exports.createStudent = async (req,res) => {
         const studentDetail = await Student.createStudent(req.body);
         if(studentDetail.status){
             const tokeDetail = await CreateJWT.createJWToken({
-                userId: instructorDetail.instructor._id,
-                email: instructorDetail.instructor.email,
+                userId: studentDetail.student._id,
+                email: studentDetail.student.email,
                 role: "student"
             })
             res.status(200).json({

@@ -22,6 +22,9 @@ const encodePassword = async (password) => {
     return await bcrypt.hash(password, 12);
 }
 const comparePassword = async (correctPassword,providedPassword) => {
+    console.log("checking")
+    console.log(providedPassword);
+    console.log(correctPassword);
     return await bcrypt.compare(providedPassword,correctPassword);
 }
 

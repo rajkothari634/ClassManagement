@@ -4,7 +4,7 @@ import styled from "styled-components";
 import {lightTheme} from "./constantManagement"
 import { useEffect, useState, useContext } from "react";
 import { getCookie } from "./cookie";
-import {Context} from "../components/context/ContextProvider"
+import {Context} from "../components/context/contextProvider"
 
 
 const LayoutDiv = styled.div`

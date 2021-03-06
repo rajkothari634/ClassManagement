@@ -48,16 +48,13 @@ const Auth = (props) => {
     const [roleSelected,setRoleSelected] = useState("instructor");
     const [processType,setProcessType] = useState("login")
     const selectUserRole = (role) => {
-        console.log(roleSelected)
+        console.log(role)
         setRoleSelected(role)
     }
     const selectProcessType = (event) => {
         setProcessType(event.target.value)
-        
-        console.log(processType)
     }
     return <ScreenDiv backgroundColor={"#ff0000"}>
-       
         <AuthDiv>
             <CompanyLogo width={"100px"} src={logoLink}/>
             <UserRoleContainer>

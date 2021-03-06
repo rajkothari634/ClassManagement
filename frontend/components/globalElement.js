@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {logoLink} from "./constantManagement"
+import {lightTheme, logoLink} from "./constantManagement"
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Validator from "validator";
@@ -23,6 +23,21 @@ const Col = styled.div`
 const CompanyLogo = styled.img`
   width: ${props => props.width};
 `
+
+const DisabledText = styled.p`
+  color: ${lightTheme.disabled};
+  height: 15px;
+  font-size: 0.8em;
+  margin-top: 0px;
+  margin-bottom: 3px;
+`
+const ViewImageLink = styled.p`
+  font-size: 0.85em;
+  cursor: pointer;
+  color: ${props => props.color};
+  margin: 5px;
+`
+
 const isEmail = (email) => {
   return Validator.isEmail(email);
 };
@@ -40,7 +55,6 @@ const isNumber = (number) => {
 };
 
 const selectValidator = (type, data) => {
-  // console.log(type);
   switch (type) {
     case "email":
       return isEmail(data);
@@ -80,7 +94,8 @@ const SelectField = (props) => {
       }}
       InputProps={{
         style: { fontSize: "0.8rem" },
-        margin: "dense",
+        margin: "dense",        
+        disableUnderline: true,
         readOnly: props.disabled === undefined ? false : props.disabled,
       }}
       variant={props.variant !== undefined ? props.variant : "outlined"}
@@ -115,9 +130,7 @@ const Field = (props) => {
   };
   useEffect(() => {
     setData(props.value)
-    // console.log("value set" + props.value)
   },[props.value])
-  //   const {id,label,type,value}
   return (
     <TextField
       id={props.id}
@@ -128,6 +141,7 @@ const Field = (props) => {
       InputProps={{
         style: { fontSize: "0.8rem" },
         margin: "dense",
+        disableUnderline: true,
         readOnly: props.disabled === undefined ? false : props.disabled,
       }}
       InputLabelProps={{
@@ -164,4 +178,4 @@ const SubmitButton = (props) => {
 };
 
 
-export { Row,Col,ScreenDiv,CompanyLogo,SelectField,Field,SubmitButton}
+export { Row,Col,ScreenDiv,CompanyLogo,DisabledText,ViewImageLink ,SelectField,Field,SubmitButton}

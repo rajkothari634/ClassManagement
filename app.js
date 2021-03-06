@@ -8,7 +8,8 @@ const RouteProtector = require("./controllersMongoDB/auth/routeProtector");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 app.use(cors());
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }))
 app.use("/",RouteProtector.routeProtector);
 app.use("/login",require("./routes/mongoDB/auth"))
 app.use("/student", require("./routes/mongoDB/student"));

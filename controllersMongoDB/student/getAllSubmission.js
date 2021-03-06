@@ -4,7 +4,7 @@ const Task = require("../../databaseMongo/task");
 exports.getAllSubmission = async (req,res) => {
     let errorCode = 500
     try {
-        const studentId = req.query["studentId"];
+        const studentId = req.query["id"];
         const student = await Student.findStudentById(studentId);
         const submissionArray = student.submissionIds;
         for(let j=0;j<submissionArray.length; j++){

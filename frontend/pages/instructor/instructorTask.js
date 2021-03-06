@@ -5,6 +5,7 @@ import React from 'react'
 import {SelectField, Col} from "../../components/globalElement"
 import { lightTheme } from '../../components/constantManagement';
 import TaskElement from "../../components/item/taskElement";
+import FlatList from "flatlist-react";
 import Layout from '../../components/layout';
 
 const Task = (props) => {

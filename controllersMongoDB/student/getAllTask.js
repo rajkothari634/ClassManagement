@@ -1,15 +1,17 @@
 const Student = require("../../databaseMongo/student");
 const Task = require("../../databaseMongo/task");
-const ExtractTask = require("../../helper/extractTask");
+const ExtractTaskByStudent = require("../../helper/extractTaskByStudent");
 exports.getAllTask = async (req,res) => {
     let errorCode = 500
     try {
-        const studentId = req.query["studentId"];
+        const studentId = req.query["id"];
         const studentDetail = await Student.findStudentById(studentId);
         if(!studentDetail.status){
+            errorCode=404;
             throw Error("student not found")
         }
-        let taskHashMapDetail = await ExtractTask.extractTask(studentDetail.student);
+        console.log(studentDetail.student)
+        let taskHashMapDetail = await ExtractTaskByStudent.extractTaskByStudent(studentDetail.student);
         if(taskHashMapDetail.status){
             res.status(200).json({
                 status: true,

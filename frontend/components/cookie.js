@@ -15,7 +15,6 @@ const deleteCookie = (cname) => {
 
 const getCookie = (cname) => {
     var name = cname + "=";
-    // console.log(cname);
   
     if (document) {
       var decodedCookie = decodeURIComponent(document.cookie);

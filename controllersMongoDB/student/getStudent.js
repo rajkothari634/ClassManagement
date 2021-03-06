@@ -1,5 +1,5 @@
 const Student = require("../../databaseMongo/student");
-const ExtractTask = require("../../helper/extractTask");
+const ExtractTaskByStudent = require("../../helper/extractTaskByStudent");
 exports.getStudent = async (req,res) => {
     let errorCode = 500
     try {
@@ -9,7 +9,7 @@ exports.getStudent = async (req,res) => {
         }
         let studentDetail = await Student.findStudentById(req.query["id"]);
         if(studentDetail.status){
-            let taskHashMapDetail = await  ExtractTask.extractTask(studentDetail.student);
+            let taskHashMapDetail = await  ExtractTaskByStudent.extractTaskByStudent(studentDetail.student);
             if(taskHashMapDetail.status){
                 studentDetail.student.taskHashMap = taskHashMapDetail.taskHashMap;
             }

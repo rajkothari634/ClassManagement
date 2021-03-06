@@ -4,7 +4,7 @@ const Instructor = require("../../databaseMongo/instructor");
 exports.getAllTask = async (req,res) => {
     let errorCode = 500;
     try {
-        const instructorId = req.query["instructorId"];
+        const instructorId = req.query["id"];
         const instructorDetail = await Instructor.findInstructorById(instructorId);
         if(instructorDetail.status){
             const taskArray = instructorDetail.instructor.taskIds;

@@ -26,7 +26,11 @@ const device = {
     desktopL: `(min-width: ${size.desktop})`,
 };
 const colorCode = {
-    white: "#ffffff"
+    white: "#ffffff",
+    red: "#ff0000",
+    green: "#00ff00",
+    blue: "#0000ff",
+    black: "#000000"
 }
 const lightTheme = {
     name: 'light',
@@ -49,5 +53,11 @@ const UserLabel = [
     { label: "Student", value: "student" }
 ]
 
+const LevelLabel = [
+    {label: "Beginner",value: "Beginner"},
+    {label: "Intermediate", value: "Intermediate"},
+    {label: "Advance", value: "Advance"}
+]
 
-export { device, UserLabel, lightTheme, API, logoLink}
+
+export { device, UserLabel, LevelLabel ,lightTheme, API, logoLink}

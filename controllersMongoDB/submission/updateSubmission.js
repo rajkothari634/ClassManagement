@@ -1,6 +1,7 @@
 const Submission = require("../../databaseMongo/submission")
 exports.updateSubmission = async (req,res) => {
     let errorCode = 500;
+    console.log("koip")
     try {
         const body = req.body;
         const file = req.file;
@@ -14,7 +15,7 @@ exports.updateSubmission = async (req,res) => {
             res.status(200).json({
                 status:true,
                 data:{
-                    updatedSubmission: updatedSubmission
+                    updatedSubmission: updatedSubmission.submission
                 }
             })
         }else{

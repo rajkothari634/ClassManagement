@@ -48,7 +48,7 @@ exports.updateTask = async (taskId,updatedBody) => {
 
 exports.getTaskById = async (taskId) => {
     try {
-        const task = await Task.findById(taskId);
+        const task = await Task.findById(taskId).populate("instructorId","-password -taskIds -studentIds");
         return {
             status: true,
             task: task

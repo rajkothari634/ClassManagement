@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {lightTheme} from "../constantManagement"
 import {Field,SelectField,SubmitButton} from "../globalElement"
 import {fetchData} from "../fetchData";
@@ -8,8 +8,12 @@ import Router from "next/router";
 
 
 const Login = (props) => {
+    
+    console.log(props.role)
     const [meta,setMeta] = useState({
-        role: props.role
+        role: props.role,
+        email: "",
+        password: ""
     })
     const [validate, setValidate] = useState({
         email: false,
@@ -17,6 +21,12 @@ const Login = (props) => {
     });
     const [loading, setLoading] = useState(false);
     const [loginButton, setLoginButton] = useState(false);
+    useEffect(() => {
+        setMeta({
+            ...meta,
+            role: props.role
+        })
+    },[props.role])
 
     const handleMeta = (event,error) => {
         setMeta({
@@ -51,20 +61,18 @@ const Login = (props) => {
             body : meta
         })
         if(data.status){
-            console.log("checking in case of output")
+            console.log("entering in student task")
             insertCookie(data);
             if(data.role==="instructor"){
-                console.log("entering in student task")
-                Router.push("instructor/task");
+                Router.push("instructor/instructorTask");
             }else{
-                Router.push("student/task");
+                console.log("entering in student task")
+                Router.push("student/studentTask");
             }
         }else{
             //show error
         }
         setLoading(false)
-        
-        console.log(data)
     }
     const insertCookie = (data) => {
         console.log("njio")
@@ -81,6 +89,7 @@ const Login = (props) => {
               id="email"
               label="Email"
               type="email"
+              value={meta.email}
               handleFunc={handleMeta}
             />
         </Grid>
@@ -89,6 +98,7 @@ const Login = (props) => {
               id="password"
               label="Password"
               type="password"
+              value={meta.password}
               handleFunc={handleMeta}
             />
         </Grid>

@@ -31,7 +31,7 @@ const DisabledText = styled.p`
   margin-top: 0px;
   margin-bottom: 3px;
 `
-const ViewImageLink = styled.p`
+const StyledLink = styled.p`
   font-size: 0.85em;
   cursor: pointer;
   color: ${props => props.color};
@@ -142,6 +142,7 @@ const Field = (props) => {
         style: { fontSize: "0.8rem" },
         margin: "dense",
         disableUnderline: true,
+        multiline: props.multiline === undefined ? false : props.multiline ,
         readOnly: props.disabled === undefined ? false : props.disabled,
       }}
       InputLabelProps={{
@@ -178,4 +179,4 @@ const SubmitButton = (props) => {
 };
 
 
-export { Row,Col,ScreenDiv,CompanyLogo,DisabledText,ViewImageLink ,SelectField,Field,SubmitButton}
+export { Row,Col,ScreenDiv,CompanyLogo,DisabledText, StyledLink ,SelectField,Field,SubmitButton}

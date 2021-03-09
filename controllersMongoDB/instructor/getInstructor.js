@@ -7,7 +7,7 @@ exports.getInstructor = async (req,res) => {
             errorCode = 400;
             throw Error("fields are missing");
         }
-        const instructorDetail = await Instructor.findInstructorById(req.query["id"]);
+        const instructorDetail = await Instructor.findInstructorById({id: req.query["id"]});
         if(instructorDetail.status){
             res.status(200).json({
                 status: true,

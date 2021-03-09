@@ -50,7 +50,7 @@ const isValid = async (instructorId) => {
     return true
 }
 const isValidInstructor = async (instructorId) => {
-    const instructorDetail = await Instructor.findInstructorById(instructorId);
+    const instructorDetail = await Instructor.findInstructorById({id: instructorId});
     if(instructorDetail.status){
         return true
     }else{

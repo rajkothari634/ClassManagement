@@ -8,7 +8,7 @@ import StudentTaskElement from "../../components/item/studentTaskItem/studentTas
 import FlatList from "flatlist-react";
 import Layout from '../../components/layout';
 import {Context} from "../../components/context/contextProvider";
-const TaskDiv = styled(Col)`
+const StudentTaskDiv = styled(Col)`
     width: 99vw;
     align-items: center;
     min-height: calc(100vh-60)px;
@@ -26,12 +26,7 @@ const StudentTask = (props) => {
         taskType: "all"
     });
     const { user,tasks,storeTasks,storeUser} = useContext(Context)
-    const handleMeta = (event, error) => {
-        setMeta({
-            ...meta,
-            [event.target.id]: event.target.value,
-        })
-    }
+
     useEffect(()=>{
         storeTasks();
     },[user]);
@@ -80,9 +75,15 @@ const StudentTask = (props) => {
         }
         return filteredTasks;
     }
+    const handleMeta = (event, error) => {
+        setMeta({
+            ...meta,
+            [event.target.id]: event.target.value,
+        })
+    }
     return <Layout>
-      <TaskDiv>
-        <Grid container spacing={2} style={{width:"95%",marginTop:"50px"}}>
+      <StudentTaskDiv>
+        <Grid container spacing={2} style={{marginTop:"50px",padding:"2%"}}>
             <Grid item lg={2} md={2} sm={4} xs={4}>
                 <SelectField
                     id="taskType"
@@ -105,7 +106,7 @@ const StudentTask = (props) => {
                 /> 
             </Grid>
         </Grid>
-      </TaskDiv>
+      </StudentTaskDiv>
     </Layout> 
 }
 

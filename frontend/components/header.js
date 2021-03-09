@@ -5,6 +5,8 @@ import {device,lightTheme,logoLink} from "./constantManagement";
 import Link from "next/link";
 import Router from "next/router";
 import { deleteCookie } from "./cookie";
+import { useContext } from "react";
+import { Context } from "./context/contextProvider";
 
 const HeaderContainer = styled(Col)`
   width: 99vw;
@@ -61,14 +63,17 @@ const LinkDiv = styled.p`
 const Header = (props) => {
     const email = props.email;
     const name = props.name;
+    const role = props.role;
+    const {clearData} = useContext(Context);
     const logout = () => {
-      deleteCookie("email");
-      deleteCookie("name");
-      deleteCookie("role");
-      deleteCookie("jwToken");
-      deleteCookie("id");
+      clearData();
       Router.push("/auth")
     }
+    let isInstructor = role==="student"?false:true;
+    const linkToTask = !isInstructor ? "/student/studentTask" : "/instructor/allTask";
+    const linkToInstructor = "/student/allInstructor";
+    const linkToStudent = "/instructor/allStudent";
+    const linkToSubmission = "/instructor/allSubmission"
 
     return <HeaderContainer>
       <Div>
@@ -76,14 +81,17 @@ const Header = (props) => {
       </Div>
       <NavDiv>
         <NavListItem>
-          <Link href={"/task"}><LinkDiv>TASK</LinkDiv></Link>
+          <Link href={linkToTask}><LinkDiv>TASK</LinkDiv></Link>
         </NavListItem>
-        <NavListItem>
-          <Link href={"/submission"}><LinkDiv>SUBMISSION</LinkDiv></Link>
-        </NavListItem>
-        <NavListItem>
-          <Link href={"/instructor"}><LinkDiv>INSTRUCTOR</LinkDiv></Link>
-        </NavListItem>
+        
+        {isInstructor ? <NavListItem>
+          <Link href={linkToStudent} ><LinkDiv>STUDENT</LinkDiv></Link>
+        </NavListItem> : <NavListItem>
+          <Link href={linkToInstructor}><LinkDiv>INSTRUCTOR</LinkDiv></Link>
+        </NavListItem>}
+        {isInstructor? <NavListItem>
+          <Link href={linkToSubmission}><LinkDiv>SUBMISSION</LinkDiv></Link>
+        </NavListItem>:null}
       </NavDiv>
       <Div>
         <LinkDiv onClick={() => {

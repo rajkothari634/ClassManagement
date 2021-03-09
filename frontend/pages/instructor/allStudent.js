@@ -6,44 +6,44 @@ import FlatList from "flatlist-react";
 import styled from "styled-components"
 import { Col } from '../../components/globalElement';
 import { Grid } from '@material-ui/core';
-import InstructorElement from "../../components/item/instructorElement"
+import StudentElement from "../../components/item/studentElement"
 
-const InstructorDiv = styled(Col)`
+const StudentDiv = styled(Col)`
     width: 99vw;
     align-items: center;
     min-height: calc(100vh-60)px;
     background-color: ${lightTheme.background};
 `
-const AllInstructor = (props) => {
-    const {user,storeUser,instructors, storeInstructors} = useContext(Context);
+const AllStudent = (props) => {
+    const {user,storeUser,students, storeStudents} = useContext(Context);
     useEffect(()=>{
-        console.log("calling set instructor")
-        storeInstructors()
+        console.log("calling set student")
+        storeStudents()
     },[])
-    const getFilterInstructors = (instructors) => {
-        return instructors
+    const getFilterStudents = (students) => {
+        return students
     }
     return <div>
         <Layout>
-            <InstructorDiv>
+            <StudentDiv>
                 <Grid container spacing={2} style={{marginTop:"50px",padding:"2%"}}>
                     <Grid item lg={12} md={12} xs={12} sm={12}>
                         <FlatList
-                            list={ getFilterInstructors(instructors)}
+                            list={getFilterStudents(students)}
                             renderItem={(item) => (
-                                <InstructorElement
+                                <StudentElement
                                     user={user}
                                     key={item._id}
-                                    instructor={item}
+                                    student={item}
                                 />
                             )}
                             renderWhenEmpty={() => <div><center>Loading...</center></div>}
                         /> 
                     </Grid>
                 </Grid>
-            </InstructorDiv>
+            </StudentDiv>
         </Layout>
     </div>
 }
 
-export default AllInstructor
+export default AllStudent

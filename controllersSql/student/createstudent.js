@@ -15,9 +15,8 @@ exports.createStudent = async (req, res) => {
     ) {
       throw Error("Fields are missing");
     }
-    const isInstructor = await Instructor.findInstructorById(
-      req.body.instructor_id
-    );
+    const isInstructor = await Instructor.findInstructorById({id: req.body.instructor_id
+    });
     if (isInstructor.status == false) {
       throw Error("instructor not found");
     }

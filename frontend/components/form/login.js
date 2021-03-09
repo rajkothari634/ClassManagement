@@ -64,10 +64,10 @@ const Login = (props) => {
             console.log("entering in student task")
             insertCookie(data);
             if(data.role==="instructor"){
-                Router.push("instructor/instructorTask");
+                Router.push("instructor/allTask");
             }else{
                 console.log("entering in student task")
-                Router.push("student/studentTask");
+                Router.push("student/allTask");
             }
         }else{
             //show error

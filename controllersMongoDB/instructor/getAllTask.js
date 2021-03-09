@@ -5,7 +5,7 @@ exports.getAllTask = async (req,res) => {
     let errorCode = 500;
     try {
         const instructorId = req.query["id"];
-        const instructorDetail = await Instructor.findInstructorById(instructorId);
+        const instructorDetail = await Instructor.findInstructorById({id:instructorId});
         if(instructorDetail.status){
             const taskArray = instructorDetail.instructor.taskIds;
             res.status(200).json({

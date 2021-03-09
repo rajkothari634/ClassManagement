@@ -122,7 +122,7 @@ exports.insertSubmissionId = async (submissionId,studentId) => {
 exports.insertInstructorId  = async (studentId,instructorId) => {
     try {
         const updatedStudent = await Student.findByIdAndUpdate(studentId,{
-            $push: {instructorIds : instructorId}
+            $addToSet: {instructorIds : instructorId}
         })
         console.log(updatedStudent)
         if(updatedStudent){

@@ -1,6 +1,7 @@
 const Instructor = require("../dbSchemaMongo/instructorModel");
 const bcrypt = require("bcrypt");
 const CreateJWT = require("../helper/jwToken/createJWToken");
+var mongoose = require('mongoose'); 
 
 exports.createInstructor = async (body) => {
     try {
@@ -27,19 +28,25 @@ const comparePassword = async (correctPassword,providedPassword) => {
     return await bcrypt.compare(providedPassword,correctPassword);
 }
 
-exports.findInstructorById = async (id) => {
+exports.findInstructorById = async (data) => {
     try {
-        let instructor = await Instructor.findById(id).populate("taskIds").populate("studentIds", '-password');
-
+   
+        let {id,fetchTaskDetail,fetchStudentDetail} = data;
+        let instructor =  {}
+        console.log(id)
+        if(fetchTaskDetail===0&&fetchStudentDetail==0){
+            instructor = await Instructor.findById(id);
+        }else{
+            instructor = await Instructor.findById(id).populate("taskIds").populate("studentIds", '-password');
+        }
         if(instructor){
+            console.log(instructor)
             return {
                 status: true,
                 instructor: instructor
             }
         }else{
-            return {
-                status: false
-            }
+            throw Error("instructor not found")
         }
     } catch (err) {
         return {
@@ -121,8 +128,8 @@ exports.insertTaskId = async (instructorId,taskId) => {
 exports.insertStudentId  = async (studentId,instructorId) => {
     try {
         const updatedInstructor = await Instructor.findByIdAndUpdate(instructorId,{
-            $push: {studentIds : studentId}
-        })
+            $addToSet: {studentIds : studentId}
+        },{new:true})
         if(updatedInstructor){
             return {
                 status: true,

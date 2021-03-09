@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { lightTheme } from "../../constantManagement";
-import TaskElement from "./taskElement"
-import SubmissionElement from "./submissionElement"
+import CreateSubmission from "../../create/createSubmission";
+import { DisabledText } from "../../globalElement";
+import SubmissionElement from "../submissionElement"
+import TaskElement from "../taskElement";
 
 const StudentTaskElementDiv = styled.div`
     width: 100%;
@@ -18,7 +20,6 @@ const StudentTaskElementDiv = styled.div`
 const StudentTaskElement = (props) => {
     let user = props.user;
     let task = props.task;
-    
     let submission = props.task.submission;
     const getBorderColor = () => {
         console.log("border color");
@@ -36,8 +37,11 @@ const StudentTaskElement = (props) => {
     }
     
     return <StudentTaskElementDiv key={task._id+"div"} borderColor={getBorderColor()}>
+        <DisabledText>Task</DisabledText>
         <TaskElement key={task._id} user={user} task={task} />
-        {submission!==undefined&&submission!==null ? <SubmissionElement key={submission._id} user={user} submission={submission}/> : null }
+        <DisabledText style={{marginTop: "10px"}}>Submission</DisabledText>
+        {submission!==undefined&&submission!==null ? <SubmissionElement key={submission._id} user={user} submission={submission}/> : 
+        <CreateSubmission user={user} task={task} /> }
     </StudentTaskElementDiv>
 }
 

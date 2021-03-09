@@ -1,22 +1,22 @@
 import React, { createContext, useState} from 'react';
 import { fetchData } from "../fetchData";
-import { getCookie } from "../cookie";
+import { deleteCookie, getCookie } from "../cookie";
 import Router from "next/router"
 export const Context = createContext();
+
+
 
 const ContextProvider = (props) => {
     const [user,setUser] = useState({});
     const [tasks,setTasks] = useState([]);
     const [instructors,setInstructors] = useState([]);
-    
-    const storeUser = (data) => {
+    const [students,setStudents] = useState([]);
+    const [submissions,setSubmissions] = useState([]);
+
+    const storeUser = () => {
         if (!user.email || !user.role || !user.jwToken) {
-            let email = getCookie("email");
-            let role = getCookie("role");
-            let jwToken = getCookie("jwToken");
-            let name = getCookie("name")
-            let id = getCookie("id")
-            if (!email || !role || !jwToken || !name) {
+            let {email,role,jwToken,name,id} = getUserCredential();
+            if (!email || !role || !jwToken || !name || !id) {
               Router.push("/auth");
             } else {
               setUser({
@@ -27,73 +27,153 @@ const ContextProvider = (props) => {
                 id: id
               });
               //call required function to get things about user
+              console.log("done")
+              console.log(jwToken)
+              return {
+                email: email,
+                role: role,
+                jwToken: jwToken,
+                name: name,
+                id: id
+              }
             }
         }else{
               //call required function to get things about user
+              return user;
         }
     }
-    const storeTasks = async () => {
-      if(user.jwToken===undefined || user.jwToken === null || user.id===undefined || user.id === null){
+    const storeTasks = async () => {    
+      let userData = user; 
+      if(userData.jwToken===undefined || userData.jwToken === null || userData.id===undefined || userData.id === null){
         storeUser();
+        userData = getUserCredential();
         //need to change 
-        setTasks([])
-        return;
       }
       console.log("student task")
       let fetchedTasksDetail = await fetchData({
         method: "GET",
-        url: "/student/getAllTask",
-        jwToken: user.jwToken,
+        url: "/"+userData.role+"/getAllTask",
+        jwToken: userData.jwToken,
         parameter: {
-          id: user.id
+          id: userData.id
         }
       });
       if(fetchedTasksDetail.status){
-        let taskHashMap = fetchedTasksDetail.data.taskHashMap;
         let taskArray = []
-        for(let key in taskHashMap){
-          let task = taskHashMap[key];
-          task.endDate = new Date(task.endDate);
-          taskArray.push(taskHashMap[key])
+        if(userData.role==="student"){
+          let taskHashMap = fetchedTasksDetail.data.taskHashMap;
+        
+          for(let key in taskHashMap){
+            let task = taskHashMap[key];
+            task.endDate = new Date(task.endDate);
+            taskArray.push(taskHashMap[key])
+          }
+          setTasks(taskArray);
+        }else{
+          
+          for(let i=0;i<fetchedTasksDetail.data.taskArray;i++){
+            fetchedTasksDetail.data.taskArray[i].endDate = new Date(fetchedTasksDetail.data.taskArray[i].endDate);
+          }
+          setTasks(fetchedTasksDetail.data.taskArray)
         }
-        setTasks(taskArray);
+        
         console.log(taskArray)
       }
       console.log("kforit")
       console.log(fetchedTasksDetail)
     }
-
     const storeInstructors = async () => {
-      console.log("started")
+      let userData = user;
       if(user.jwToken===undefined || user.jwToken === null || user.id===undefined || user.id === null){
-        console.log(user)
         storeUser();
-        setInstructors([])
-        console.log("inside empty user")
-        return;
+        userData = getUserCredential();
       }
-      console.log("user not empty")
       let fetchedInstructorsDetail = await fetchData({
         method: "GET",
         url: "/student/getAllInstructor",
-        jwToken: user.jwToken,
+        jwToken: userData.jwToken,
         parameter: {
-          id: user.id
+          id: userData.id
         }
       });
-      console.log("qwer")
       if(fetchedInstructorsDetail.status){
         let instructorArray = fetchedInstructorsDetail.data.instructorArray;
         setInstructors(instructorArray)
-        console.log(instructorArray)
       }
-      console.log("completed")
     }
+    const storeStudents = async () => {
+      let userData = user; 
+      if(userData.jwToken===undefined || userData.jwToken === null || userData.id===undefined || userData.id === null){
+        storeUser();
+        userData = getUserCredential();
+      }
+      let fetchedStudentsDetail = await fetchData({
+        method: "GET",
+        url: "/instructor/getAllStudent",
+        jwToken: userData.jwToken,
+        parameter: {
+          id: userData.id
+        }
+      });
+      if(fetchedStudentsDetail.status){
+        let studentArray = fetchedStudentsDetail.data.studentArray;
+        setStudents(studentArray);
+      }
 
+    }
+    const storeSubmissions = async () => {
+      let userData = user; 
+      if(userData.jwToken===undefined || userData.jwToken === null || userData.id===undefined || userData.id === null){
+        storeUser();
+        userData = getUserCredential();
+      }
+      let fetchedSubmissionsDetail = await fetchData({
+        method: "GET",
+        url: "/instructor/getAllSubmission",
+        jwToken: userData.jwToken,
+        parameter: {
+          id: userData.id
+        }
+      });
+      if(fetchedSubmissionsDetail.status){
+        for(let i=0;i<fetchedSubmissionsDetail.data.submissionArray.length;i++){
+          fetchedSubmissionsDetail.data.submissionArray[i].taskId.endDate = new Date(fetchedSubmissionsDetail.data.submissionArray[i].taskId.endDate)
+        }
+        let submissionArray = fetchedSubmissionsDetail.data.submissionArray;
+        setSubmissions(submissionArray);
+      }
+    }
+    const clearData = async () => {
+      deleteCookie("email");
+      deleteCookie("name");
+      deleteCookie("role");
+      deleteCookie("jwToken");
+      deleteCookie("id");
+      setUser({})
+      setTasks([])
+      setInstructors([]);
+      setStudents([]);
+      setSubmissions([]);
 
-    return <Context.Provider value={{user, storeUser, tasks, storeTasks, instructors, storeInstructors}}>
+    }
+    return <Context.Provider value={{user, storeUser, tasks, storeTasks, instructors, storeInstructors, students, storeStudents, submissions, storeSubmissions, clearData}}>
         {props.children}
     </Context.Provider>
+}
+
+const getUserCredential = () => {
+  let email = getCookie("email");
+  let role = getCookie("role");
+  let jwToken = getCookie("jwToken");
+  let name = getCookie("name")
+  let id = getCookie("id")
+  return {
+    email: email,
+    role: role,
+    jwToken: jwToken,
+    name: name,
+    id: id
+  }
 }
 
 export default ContextProvider;

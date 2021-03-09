@@ -4,7 +4,7 @@ exports.getAllStudent = async (req,res) => {
     let errorCode = 500;
     try {
         const instructorId = req.query["id"];
-        const instructorDetail = await Instructor.findInstructorById(instructorId);
+        const instructorDetail = await Instructor.findInstructorById({id:instructorId});
         if(instructorDetail.status){
             const studentArray = instructorDetail.instructor.studentIds;
             res.status(200).json({

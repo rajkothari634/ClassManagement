@@ -4,17 +4,17 @@ exports.updateTask = async (req,res) => {
     let errorCode = 500
     try {
         let taskId = req.body.taskId;
-        console.log(req.body)
         if(taskId===undefined || taskId===null){
             throw Error("Provide task Id");
         }
-        let updatingbody = validObject(req.body,req.file);
+        let updatingbody = await validObject(req.body,req.file);
         const result = await Task.updateTask(taskId,updatingbody);
+        
         if(result.status){
             res.status(200).json({
                 status: true,
                 data: {
-                    task:result.task
+                    updatedTask:result.task
                 }
             })
         }else{
@@ -40,8 +40,11 @@ const validObject = async (updatingBody,file) => {
     if(updatingBody.explanation !== undefined && updatingBody.explanation !== null){
         object["explanation"] = updatingBody.explanation
     }
+    if(updatingBody.taskName !== undefined && updatingBody.taskName!==null){
+        object["taskName"] = updatingBody.taskName
+    }
     try {
-        object["imageData"] = file.buffer.toString("base64");
+        object["imageData"] = await file.buffer.toString("base64");
     } catch (err) {
         console.log("task image is not updating")
     }

@@ -4,11 +4,8 @@ const Instructor = require("../../databaseMongo/instructor");
 exports.createTask = async (req,res) => {
     let errorCode = 500;
     try {
-        console.log(req.body.explanation);
-        console.log(req.file)
         let body = req.body;
         body.endDate = new Date(body.endDate);
-        console.log(body.endDate)
         let instructorId = req.body.instructorId;
         if(!isValid(body,req.file)){
             errorCode = 400

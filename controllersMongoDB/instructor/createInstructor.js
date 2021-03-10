@@ -4,13 +4,10 @@ const CreateJWT = require("../../helper/jwToken/createJWToken");
 exports.createInstructor = async (req,res) => {
     var errorCode = 500;
     try {
-        console.log("creating instructor")
-        console.log(req.body);
         if(!isValid(req.body)){
             errorCode = 400
             throw Error("requested body is not valid")
         }
-        console.log("valid object")
         const instructorDetail = await Instructor.createInstructor(req.body);
         if(instructorDetail.status){
             const tokeDetail = await CreateJWT.createJWToken({
@@ -24,15 +21,12 @@ exports.createInstructor = async (req,res) => {
                 email: instructorDetail.instructor.email,
                 jwToken: tokeDetail.jwToken
             }
-            console.log("bhi");
-            console.log(instructor)
             res.status(200).json({
                 status: true,
                 data: {
                     instructor: instructor
                 }
             })
-            console.log("completed by creation ")
         }else{
             errorCode = 400;
             throw Error(instructorDetail.errorMessage)

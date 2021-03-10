@@ -1,14 +1,19 @@
 const Submission = require("../../databaseMongo/submission")
-
+const mongoose = require("mongoose")
 exports.getSubmission = async (req,res) => {
     let errorCode = 500
     try {
-        if(req.query["id"]===undefined || req.query["id"] === null){
+        if(req.query["submissionId"]===undefined || req.query["submissionId"] === null){
             errorCode = 400;
             throw Error("fields are missing");
         }
-        const submissionDetail = await Submission.getSubmissionById(req.query["id"]);
+        const submissionDetail = await Submission.getSubmissionById(req.query["submissionId"]);
+        
         if(submissionDetail.status){
+            if(submissionDetail.submission.studentId!== mongoose.Types.ObjectId(req.query["id"])){
+                errorCode = 402;
+                throw Error("submission does not belong to student")
+            }
             res.status(200).json({
                 status: true,
                 data: {

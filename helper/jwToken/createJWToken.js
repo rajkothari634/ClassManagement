@@ -6,7 +6,7 @@ exports.createJWToken = async (data) => {
     const token = await jwt.sign(
       {
         email: data.email,
-        id: data._id,
+        id: data.id,
         role: data.role,
       },
       `${envJson.parsed.JWT_SECRET}`,

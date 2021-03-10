@@ -152,12 +152,16 @@ exports.login = async (email,password) => {
             throw Error("Instructor not found")
         }
         let passwordStatus = await comparePassword(instructor.password,password);
-        console.log("password status is required")
-        console.log(passwordStatus)
         if(passwordStatus){
             let jwToken = await CreateJWT.createJWToken({
                 email: instructor.email,
-                id: instructor.id,
+                id: instructor._id,
+                role: "instructor"
+            })
+            console.log("vhvk")
+            console.log({
+                email: instructor.email,
+                id: instructor._id,
                 role: "instructor"
             })
             return {

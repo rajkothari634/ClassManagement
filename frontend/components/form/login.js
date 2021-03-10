@@ -54,7 +54,6 @@ const Login = (props) => {
     }
     const handleSubmission = async () => {
         setLoading(true);
-        console.log(meta)
         let data = await fetchData({
             method : "POST",
             url : "/login",

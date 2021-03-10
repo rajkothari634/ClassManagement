@@ -5,8 +5,6 @@ exports.getAllInstructor = async (req,res) => {
     try {
         const query = req.body;
         const queryObject = extractQueryObject(query);
-        console.log("finding instructor")
-        console.log(queryObject)
         const instructorArrayDetails = await Instructor.findInstructor(queryObject);
         if(instructorArrayDetails.status){
             res.status(200).json({

@@ -3,8 +3,8 @@ const Student = require("../../databaseMongo/student")
 exports.login = async (req,res) => {
     let errorCode = 500;
     try {
+        console.log("hui")
         let body = req.body;
-        
         if(!isValid(req.body)){
             errorCode = 400
             throw Error("Bad Request. Fields missing.")

@@ -12,7 +12,7 @@ const fetchData = async (data) => {
         },
     };
     if(url!=="/login" && url!=="/student/createStudent" && url!== "/instructor/createInstructor"){
-      requestOptions.headers.Authorization = jwToken;
+      requestOptions.headers.authorization = jwToken;
     }
     if(method!=="FORM"&&method!=="GET"){
       requestOptions.headers["Content-Type"] = "application/json"

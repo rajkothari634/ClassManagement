@@ -1,14 +1,10 @@
-
-exports.getAllTask = async (req,res) => {
-    
-}
-
 const Task = require("../../databaseMongo/task");
+const Instructor = require("../../databaseMongo/instructor");
 
 exports.getAllTask = async (req,res) => {
     let errorCode = 500;
     try {
-        const query = req.query;
+        const query = req.body;
         const queryObject = extractQueryObject(query);
         const taskArrayDetails = await Task.findTask(queryObject);
         if(taskArrayDetails.status){

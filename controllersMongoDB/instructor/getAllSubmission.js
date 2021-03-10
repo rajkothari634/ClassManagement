@@ -6,7 +6,6 @@ exports.getAllSubmission = async (req,res) => {
     let errorCode = 500;
     try {
         const query = req.query;
-        console.log(query)
         const queryObject = extractQueryObject(query);
         const instructorDetail = await Instructor.findInstructorById({
             id: queryObject["id"],

@@ -94,11 +94,12 @@ exports.findTask = async (query) => {
 
 exports.getAllSubmission = async (taskId) => {
     try {
-        const taskArray = await Task.findById(taskId).populate("submissionIds").populate("submissionIds.studentId","-password");
-        let submissionArray = taskArray.submissionIds;
+        const task = await Task.findById(taskId).populate("submissionIds").populate("submissionIds.studentId","-password");
+        let submissionArray = task.submissionIds;
         return {
             status: true,
-            submissionArray: submissionArray
+            submissionArray: submissionArray,
+            instructorId: task.instructorId
         }
     } catch (err) {
         return {

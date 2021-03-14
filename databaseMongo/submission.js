@@ -88,8 +88,6 @@ exports.getSubmissionById = async (id) => {
 exports.findSubmission = async (query) => {
     try {
         const submissionArray = await Submission.find(query).populate("studentId","studentName email").populate("taskId","taskName endDate");
-        console.log("checking the end date")
-        console.log(submissionArray)
         if(submissionArray.length===0){
             return {
                 status: false,

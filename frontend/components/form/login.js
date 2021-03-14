@@ -8,8 +8,6 @@ import Router from "next/router";
 
 
 const Login = (props) => {
-    
-    console.log(props.role)
     const [meta,setMeta] = useState({
         role: props.role,
         email: "",
@@ -49,7 +47,6 @@ const Login = (props) => {
               }
             }
         }
-        console.log("nbhji")
         setLoginButton(true);
     }
     const handleSubmission = async () => {
@@ -60,12 +57,10 @@ const Login = (props) => {
             body : meta
         })
         if(data.status){
-            console.log("entering in student task")
             insertCookie(data);
             if(data.role==="instructor"){
                 Router.push("instructor/allTask");
             }else{
-                console.log("entering in student task")
                 Router.push("student/allTask");
             }
         }else{

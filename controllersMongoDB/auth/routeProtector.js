@@ -6,12 +6,10 @@ exports.routeProtector = async (req,res,next) => {
   try {
     var token;
     //Authorization  header  checking
-    console.log(req.url)
     if(req.url==="/login" || req.url==="/student/createStudent" || req.url==="/instructor/createInstructor"){
       next();
       return;
     }
-    console.log(req.headers)
     if (req.headers.authorization && req.headers.authorization.length > 0) {
       token = req.headers.authorization;
     } else {
@@ -40,8 +38,8 @@ exports.routeProtector = async (req,res,next) => {
     req = verificationDetails.req;
     next();
   } catch (err) {
-    console.log(err)
     res.status(errorCode).json({
+      errorText: err.message,
       status: false
     })
   }

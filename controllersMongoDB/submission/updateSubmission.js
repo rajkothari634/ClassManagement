@@ -2,7 +2,6 @@ const Submission = require("../../databaseMongo/submission")
 const mongoose = require("mongoose")
 exports.updateSubmission = async (req,res) => {
     let errorCode = 500;
-    console.log("koip")
     try {
         const body = req.body;
         const file = req.file;
@@ -27,6 +26,7 @@ exports.updateSubmission = async (req,res) => {
             throw Error(updatedSubmission.errorMessage)
         }
     } catch (err) {
+        console.log(err)
         res.status(errorCode).json({
             errorText: err.message,
             status: false,
@@ -35,7 +35,7 @@ exports.updateSubmission = async (req,res) => {
     }
 }
 
-const isValid = async (body,file) => {
+const isValid = (body,file) => {
     if(body.submissionId === undefined || body.submissionId===null){
         return false
     }
@@ -48,7 +48,7 @@ const isValid = async (body,file) => {
 const validStudent = async (submissionId,studentId) => {
     const submissionDetail = await Submission.getSubmissionById(submissionId);
     if(submissionDetail.status){
-        if(submissionDetail.submission.studentId === mongoose.Types.ObjectId(studentId)){
+        if(submissionDetail.submission.studentId.toString() === studentId){
             return true
         }else{
             return false

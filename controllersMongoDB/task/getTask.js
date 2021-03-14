@@ -7,9 +7,10 @@ exports.getTask = async (req,res) => {
             errorCode = 400;
             throw Error("fields are missing");
         }
+
         const taskDetail = await Task.getTaskById(req.query["taskId"]);
         if(taskDetail.status){
-            if(taskDetail.task.instructorId!==mongoose.Types.ObjectId(req.query["id"])){
+            if(taskDetail.task.instructorId._id.toString()!==req.query["id"]){
                 errorCode = 402;
                 throw Error("task is created by other instructor")
             }

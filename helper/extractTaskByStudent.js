@@ -16,7 +16,6 @@ exports.extractTaskByStudent = async (student) => {
             }
         }
         for(let j=0;j<submissionArray.length; j++){
-            console.log("hui")
             let task = taskHashMap[submissionArray[j].taskId];
             
             task = {
@@ -24,16 +23,13 @@ exports.extractTaskByStudent = async (student) => {
                 submission: submissionArray[j]
             }
             taskHashMap[submissionArray[j].taskId] = task;
-            console.log(task)
         }
-        console.log(taskHashMap)
         return {
             status: true,
             taskHashMap: taskHashMap
         }
     
     } catch (err) {
-        console.log(err)
         return {
             status: false
         }

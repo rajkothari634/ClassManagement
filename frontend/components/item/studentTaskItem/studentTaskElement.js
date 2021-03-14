@@ -22,8 +22,6 @@ const StudentTaskElement = (props) => {
     let task = props.task;
     let submission = props.task.submission;
     const getBorderColor = () => {
-        console.log("border color");
-        console.log(typeof task.endDate)
         if((submission===undefined || submission === null) && task.endDate > Date.now()){
             return lightTheme.dark
         }

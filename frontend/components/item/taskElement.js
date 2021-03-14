@@ -34,11 +34,6 @@ const TaskElement = (props) => {
             ...updatedMeta,
             [event.target.id]:event.target.value
         })
-        console.log("updated handle meta")
-        console.log({
-            ...updatedMeta,
-            [event.target.id]:event.target.value
-        })
     }
     const [loading,setLoading] = useState(false);
     const [editMode,setEditMode] = useState(false);

@@ -11,7 +11,7 @@ exports.createInstructor = async (req,res) => {
         const instructorDetail = await Instructor.createInstructor(req.body);
         if(instructorDetail.status){
             const tokeDetail = await CreateJWT.createJWToken({
-                userId: instructorDetail.instructor._id,
+                id: instructorDetail.instructor._id,
                 email: instructorDetail.instructor.email,
                 role: "instructor"
             })
@@ -32,7 +32,6 @@ exports.createInstructor = async (req,res) => {
             throw Error(instructorDetail.errorMessage)
         }
     } catch (err) {
-        console.log(err)
         res.status(errorCode).json({
             errorText: err.message,
             status: false,

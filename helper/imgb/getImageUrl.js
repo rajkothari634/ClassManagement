@@ -21,8 +21,6 @@ exports.getImageUrl = async (imageData) => {
       if (imgUpload.status !== 200) {
         throw Error("not able to upload image");
       }
-      console.log("completed")
       let imageUrl= imgUpload.data.image.url;
-      console.log(imageUrl)
     return imageUrl;
 }

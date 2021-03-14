@@ -27,8 +27,6 @@ const ContextProvider = (props) => {
                 id: id
               });
               //call required function to get things about user
-              console.log("done")
-              console.log(jwToken)
               return {
                 email: email,
                 role: role,
@@ -49,7 +47,6 @@ const ContextProvider = (props) => {
         userData = getUserCredential();
         //need to change 
       }
-      console.log("student task")
       let fetchedTasksDetail = await fetchData({
         method: "GET",
         url: "/"+userData.role+"/getAllTask",
@@ -76,11 +73,7 @@ const ContextProvider = (props) => {
           }
           setTasks(fetchedTasksDetail.data.taskArray)
         }
-        
-        console.log(taskArray)
       }
-      console.log("kforit")
-      console.log(fetchedTasksDetail)
     }
     const storeInstructors = async () => {
       let userData = user;

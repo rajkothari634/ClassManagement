@@ -26,9 +26,6 @@ const CreateSubmission = (props) => {
         let formData = new FormData(document.getElementById("createSubmissionForm"))
         formData.append("studentId",user.id);
         formData.append("taskId",task._id);
-        console.log(user.id);
-        console.log(task._id);
-        console.log("nvjg")
         let createSubmissionDetails = await fetchData({
             method: "FORM",
             url: "/submission/createSubmission",
@@ -38,7 +35,7 @@ const CreateSubmission = (props) => {
         if(createSubmissionDetails.status){
             storeTasks();
         }else{
-            console.log("fail to store")
+            // console.log("fail to store")
         }
         setLoading(false)
     }

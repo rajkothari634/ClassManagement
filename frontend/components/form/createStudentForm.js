@@ -18,7 +18,6 @@ const CreateStudentForm = (props) => {
     });
     const [createButton, setCreateButton] = useState(false);
     const handleMeta = (event, error) => {
-        // console.log(subProductNumber);
         setMeta({
           ...meta,
           [event.target.id]: event.target.value,
@@ -43,7 +42,6 @@ const CreateStudentForm = (props) => {
     };
     const handleSubmission = async () => {
       setLoading(true);
-      console.log(meta)
       let data = await fetchData({
           method : "POST",
           url : "/student/createStudent",
@@ -51,8 +49,6 @@ const CreateStudentForm = (props) => {
           body : meta
       })
       setLoading(false)
-      console.log("checking in case of output")
-      console.log(data)
     }
     return <Grid container spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12}>

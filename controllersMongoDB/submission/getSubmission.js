@@ -10,7 +10,7 @@ exports.getSubmission = async (req,res) => {
         const submissionDetail = await Submission.getSubmissionById(req.query["submissionId"]);
         
         if(submissionDetail.status){
-            if(submissionDetail.submission.studentId!== mongoose.Types.ObjectId(req.query["id"])){
+            if(submissionDetail.submission.studentId.toString()!==req.query["id"]){
                 errorCode = 402;
                 throw Error("submission does not belong to student")
             }
@@ -24,6 +24,7 @@ exports.getSubmission = async (req,res) => {
             throw Error(submissionDetail.errorMessage)
         }
     } catch (err) {
+        console.log(err)
         res.status(errorCode).json({
             errorText: err.message,
             status: false,

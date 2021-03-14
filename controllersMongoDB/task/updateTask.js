@@ -5,7 +5,9 @@ exports.updateTask = async (req,res) => {
     let errorCode = 500
     try {
         let taskId = req.body.taskId;
+        let body = req.body
         if(taskId===undefined || taskId===null){
+            errorCode=400
             throw Error("Provide task Id");
         }
         if(!validInstructor(body.taskId,body.instructorId)){
@@ -26,6 +28,7 @@ exports.updateTask = async (req,res) => {
             throw Error(result.errorMessage);
         }
     } catch (err) {
+        console.log(err)
         res.status(errorCode).json({
             errorText: err.message,
             status: false,

@@ -17,7 +17,7 @@ const GetTask = require("../../controllersMongoDB/task/getTask")
 router.post("/createTask", upload.single("image"), CreateTask.createTask);
 router.post("/updateTask", upload.single("image"), UpdateTask.updateTask);
 router.get("/getAllSubmission", GetAllSubmission.getAllSubmission);
-router.get("/getAllTask", GetAllTask.getAllTask);
+router.post("/getAllTask", GetAllTask.getAllTask);
 router.get("/getTask",GetTask.getTask)
 
 module.exports = router;

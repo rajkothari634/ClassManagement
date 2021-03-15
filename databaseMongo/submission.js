@@ -1,5 +1,5 @@
 const Submission = require("../dbSchemaMongo/submissionModel");
-const GetImageUrl = require("../imgb/getImageUrl");
+const GetImageUrl = require("../helper/imgb/getImageUrl");
 const Task = require("./task");
 const Student = require("./student");
 
@@ -42,13 +42,15 @@ exports.updateSubmission = async (submissionId,imageData,taskId) => {
             submission = await Submission.findById(submissionId);
             taskId = submission.taskId;
         }
-        if(!isAccepting(taskId)){
+        if(!Task.isAccepting(taskId)){
             return {
                 status: false,
                 errorMessage: "Submission date passed."
             }
         }
-        const result = await Submission.findByIdAndUpdate(submissionId,imageUrl,{new:true});
+        const result = await Submission.findByIdAndUpdate(submissionId,{
+            imageUrl: imageUrl
+        },{new:true});
         return {
             status: true,
             submission: result
@@ -85,7 +87,7 @@ exports.getSubmissionById = async (id) => {
 
 exports.findSubmission = async (query) => {
     try {
-        const submissionArray = await Submission.find(query);
+        const submissionArray = await Submission.find(query).populate("studentId","studentName email").populate("taskId","taskName endDate");
         if(submissionArray.length===0){
             return {
                 status: false,

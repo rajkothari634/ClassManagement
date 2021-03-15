@@ -7,6 +7,11 @@ const taskSchema = new mongoose.Schema({
         ref: 'Instructor',
         required: [true,"instructor id is required"]
     },
+    taskName: {
+        type: String,
+        unique: true,
+        required: [true, "task name is required"]
+    },
     imageUrl: {
         type: String,
         required: [true, "image url is required"]

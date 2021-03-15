@@ -1,36 +1,28 @@
 const Student = require("../../databaseMongo/student");
 const Task = require("../../databaseMongo/task");
-
+const ExtractTaskByStudent = require("../../helper/extractTaskByStudent");
 exports.getAllTask = async (req,res) => {
     let errorCode = 500
     try {
-        const studentId = req.query["studentId"];
-        const student = await Student.findStudentById(studentId);
-        const instructorArray = student.instructorIds;
-        const submissionArray = student.submissionIds;
-        let taskIdArray = []
-        for(let i=0; i<instructorArray.length; i++){
-            for(let j=0;j<instructorArray[i].taskIds.length;j++){
-                taskIdArray.push(instructorArray[i].taskIds[j]);
-            }
+        const studentId = req.query["id"];
+        const studentDetail = await Student.findStudentById(studentId);
+        if(!studentDetail.status){
+            errorCode=404;
+            throw Error("student not found")
         }
-        let taskArray = {}
-        for(let i=0;i<taskIdArray.length;i++){
-            let taskDetail = await Task.getTaskById(taskIdArray[i]);
-            if(taskDetail.status){
-                taskArray[taskDetail.task._id] = taskDetail.task;
-                taskArray[taskDetail.task._id].completed = false;
-            }
+        let taskHashMapDetail = await ExtractTaskByStudent.extractTaskByStudent(studentDetail.student);
+        if(taskHashMapDetail.status){
+            res.status(200).json({
+                status: true,
+                data: {
+                    taskHashMap: taskHashMapDetail.taskHashMap
+                }
+            })
+        }else{
+            errorCode = 404;
+            throw Error("task not found")
         }
-        for(let j=0;j<submissionArray.length; j++){
-            taskArray[submissionArray[i].taskId].completed = true;
-        }
-        res.status(200).json({
-            status: true,
-            data: {
-                taskArray: taskArray
-            }
-        })
+
     } catch (err) {
         res.status(errorCode).json({
             errorText: err.message,

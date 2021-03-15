@@ -42,6 +42,9 @@ const isValid = (body,file) => {
     if(!isValidStudent(body.studentId)){
         return false
     }
+    if(body.marks!== undefined && body.marks!==null){
+        return false
+    }
     return true
 }
 

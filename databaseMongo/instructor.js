@@ -1,5 +1,7 @@
 const Instructor = require("../dbSchemaMongo/instructorModel");
 const bcrypt = require("bcrypt");
+const CreateJWT = require("../helper/jwToken/createJWToken");
+var mongoose = require('mongoose'); 
 
 exports.createInstructor = async (body) => {
     try {
@@ -20,20 +22,27 @@ exports.createInstructor = async (body) => {
 const encodePassword = async (password) => {
     return await bcrypt.hash(password, 12);
 }
+const comparePassword = async (correctPassword,providedPassword) => {
+    return await bcrypt.compare(providedPassword,correctPassword);
+}
 
-exports.findInstructorById = async (id) => {
+exports.findInstructorById = async (data) => {
     try {
-        let instructor = await Instructor.findById(id).populate("taskIds").populate("studentIds", '-password');
-
+   
+        let {id,fetchTaskDetail,fetchStudentDetail} = data;
+        let instructor =  {}
+        if(fetchTaskDetail===0&&fetchStudentDetail==0){
+            instructor = await Instructor.findById(id);
+        }else{
+            instructor = await Instructor.findById(id).populate("taskIds").populate("studentIds", '-password');
+        }
         if(instructor){
             return {
                 status: true,
                 instructor: instructor
             }
         }else{
-            return {
-                status: false
-            }
+            throw Error("instructor not found")
         }
     } catch (err) {
         return {
@@ -115,13 +124,48 @@ exports.insertTaskId = async (instructorId,taskId) => {
 exports.insertStudentId  = async (studentId,instructorId) => {
     try {
         const updatedInstructor = await Instructor.findByIdAndUpdate(instructorId,{
-            $push: {studentIds : studentId}
-        })
+            $addToSet: {studentIds : studentId}
+        },{new:true})
         if(updatedInstructor){
             return {
                 status: true,
                 updated: updatedInstructor
             }
+        }
+    } catch (err) {
+        return {
+            status: false,
+            errorMessage: err.message
+        }
+    }
+}
+
+exports.login = async (email,password) => {
+    try {
+        const instructorArray = await Instructor.find({email:email});
+        let instructor = instructorArray[0]
+        if(instructor===undefined || instructor===null){
+            throw Error("Instructor not found")
+        }
+        let passwordStatus = await comparePassword(instructor.password,password);
+        if(passwordStatus){
+            let jwToken = await CreateJWT.createJWToken({
+                email: instructor.email,
+                id: instructor._id,
+                role: "instructor"
+            })
+            return {
+                status: true,
+                user:{
+                    _id: instructor._id,
+                    role: "instructor",
+                    name: instructor.instructorName,
+                    email: instructor.email,
+                    jwToken: jwToken.jwToken
+                }
+            }
+        }else{
+            throw Error("password is wrong")
         }
     } catch (err) {
         return {

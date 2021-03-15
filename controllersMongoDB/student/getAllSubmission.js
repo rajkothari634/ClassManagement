@@ -4,13 +4,13 @@ const Task = require("../../databaseMongo/task");
 exports.getAllSubmission = async (req,res) => {
     let errorCode = 500
     try {
-        const studentId = req.query["studentId"];
-        const student = await Student.findStudentById(studentId);
-        const submissionArray = student.submissionIds;
+        const studentId = req.query["id"];
+        const studentDetail = await Student.findStudentById(studentId);
+        const submissionArray = studentDetail.student.submissionIds;
         for(let j=0;j<submissionArray.length; j++){
-            const taskDetail = await Task.getTaskById(submissionArray[i].taskId);
+            const taskDetail = await Task.getTaskById(submissionArray[j].taskId);
             if(taskDetail.status){
-                submissionArray[i].taskId = taskDetail.task;
+                submissionArray[j].taskId = taskDetail.task;
             }
         }
         res.status(200).json({

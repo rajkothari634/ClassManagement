@@ -1,4 +1,5 @@
 const Submission = require("../../databaseMongo/submission")
+const mongoose = require("mongoose")
 exports.updateSubmission = async (req,res) => {
     let errorCode = 500;
     try {
@@ -9,18 +10,23 @@ exports.updateSubmission = async (req,res) => {
             errorCode = 400;
             throw Error("requested field are incorrect")
         }
+        if(!validStudent(body.submissionId,body.studentId)){
+            errorCode = 402;
+            throw Error("correct student access is required")
+        }
         const updatedSubmission = await Submission.updateSubmission(body.submissionId, imageData)
         if(updatedSubmission.status){
             res.status(200).json({
                 status:true,
                 data:{
-                    updatedSubmission: updatedSubmission
+                    updatedSubmission: updatedSubmission.submission
                 }
             })
         }else{
             throw Error(updatedSubmission.errorMessage)
         }
     } catch (err) {
+        console.log(err)
         res.status(errorCode).json({
             errorText: err.message,
             status: false,
@@ -29,7 +35,7 @@ exports.updateSubmission = async (req,res) => {
     }
 }
 
-const isValid = async (body,file) => {
+const isValid = (body,file) => {
     if(body.submissionId === undefined || body.submissionId===null){
         return false
     }
@@ -37,4 +43,17 @@ const isValid = async (body,file) => {
         return false
     }
     return true;
+}
+
+const validStudent = async (submissionId,studentId) => {
+    const submissionDetail = await Submission.getSubmissionById(submissionId);
+    if(submissionDetail.status){
+        if(submissionDetail.submission.studentId.toString() === studentId){
+            return true
+        }else{
+            return false
+        }
+    }else{
+        return false
+    }
 }

@@ -26,7 +26,6 @@ exports.submitTask = async (req, res) => {
     if (imgUpload.status !== 200) {
       throw Error("not able to upload image");
     }
-    console.log(imgUpload.data.image.url);
     var taskObj = {
       taskId: req.body.taskId,
       marks: "NAN",
@@ -57,7 +56,6 @@ exports.submitTask = async (req, res) => {
     }
     throw Error("not updated");
   } catch (err) {
-    console.log(err);
     res.status(400).json({
       req_result: "F",
       err_text: err.message,

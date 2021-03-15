@@ -1,5 +1,5 @@
 const Student = require("../../databaseMongo/student");
-
+const ExtractTaskByStudent = require("../../helper/extractTaskByStudent");
 exports.getStudent = async (req,res) => {
     let errorCode = 500
     try {
@@ -7,8 +7,12 @@ exports.getStudent = async (req,res) => {
             errorCode = 400;
             throw Error("fields are missing");
         }
-        const studentDetail = await Student.findStudentById(req.query["id"]);
+        let studentDetail = await Student.findStudentById(req.query["id"]);
         if(studentDetail.status){
+            let taskHashMapDetail = await  ExtractTaskByStudent.extractTaskByStudent(studentDetail.student);
+            if(taskHashMapDetail.status){
+                studentDetail.student.taskHashMap = taskHashMapDetail.taskHashMap;
+            }
             res.status(200).json({
                 status: true,
                 data: {

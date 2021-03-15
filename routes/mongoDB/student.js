@@ -15,7 +15,7 @@ const GetAllSubmission = require("../../controllersMongoDB/student/getAllSubmiss
 router.post("/createStudent", CreateStudent.createStudent);
 router.post("/selectInstructor", SelectInstructor.selectInstructor);
 router.get("/getAllTask", GetAllTask.getAllTask);
-router.get("/getAllStudent", GetAllStudent.getAllStudent);
+router.post("/getAllStudent", GetAllStudent.getAllStudent);
 router.get("/getStudent",GetStudent.getStudent);
 router.get("/getAllSubmission",GetAllSubmission.getAllSubmission);
 router.get("/getAllInstructor", GetAllInstructor.getAllInstructor);

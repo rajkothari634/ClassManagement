@@ -1,5 +1,5 @@
 const Task = require("../dbSchemaMongo/taskModel");
-const GetImageUrl = require("../imgb/getImageUrl");
+const GetImageUrl = require("../helper/imgb/getImageUrl");
 
 exports.createTask = async (body,imageData) => {
     try {
@@ -46,7 +46,7 @@ exports.updateTask = async (taskId,updatedBody) => {
 
 exports.getTaskById = async (taskId) => {
     try {
-        const task = await Task.findById(taskId);
+        const task = await Task.findById(taskId).populate("instructorId","-password -taskIds -studentIds");
         return {
             status: true,
             task: task
@@ -94,11 +94,12 @@ exports.findTask = async (query) => {
 
 exports.getAllSubmission = async (taskId) => {
     try {
-        const taskArray = await Task.findById(taskId).populate("submissionIds").populate("submissionIds.studentId","-password");
-        let submissionArray = taskArray.submissionIds;
+        const task = await Task.findById(taskId).populate("submissionIds").populate("submissionIds.studentId","-password");
+        let submissionArray = task.submissionIds;
         return {
             status: true,
-            submissionArray: submissionArray
+            submissionArray: submissionArray,
+            instructorId: task.instructorId
         }
     } catch (err) {
         return {

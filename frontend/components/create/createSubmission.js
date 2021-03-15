@@ -15,7 +15,7 @@ const CreateSubmissionDiv = styled.div`
 const CreateSubmission = (props) => {
     const user = props.user;
     const task = props.task;
-    const {storeTasks} = useContext(Context)
+    const {storeTasks,storeAlert} = useContext(Context)
     const [loading,setLoading] = useState(false);
     const createSubmission = async () => {
         if(loading){
@@ -26,9 +26,6 @@ const CreateSubmission = (props) => {
         let formData = new FormData(document.getElementById("createSubmissionForm"))
         formData.append("studentId",user.id);
         formData.append("taskId",task._id);
-        console.log(user.id);
-        console.log(task._id);
-        console.log("nvjg")
         let createSubmissionDetails = await fetchData({
             method: "FORM",
             url: "/submission/createSubmission",
@@ -37,8 +34,15 @@ const CreateSubmission = (props) => {
         })
         if(createSubmissionDetails.status){
             storeTasks();
+            storeAlert({
+                status: true,
+                message: "SUBMISSION CREATED SUCCESSFULLY"
+            })
         }else{
-            console.log("fail to store")
+            storeAlert({
+              status: false,
+              message: "FAILED TO CREATE SUBMISSION"
+            })
         }
         setLoading(false)
     }

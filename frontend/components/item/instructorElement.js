@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import Grid from "@material-ui/core/Grid";
 import { lightTheme, LevelLabel } from "../constantManagement";
 import {DisabledText, StyledLink, Field,SelectField} from "../globalElement"
 import { fetchData } from "../fetchData";
+import { Context } from "../context/contextProvider";
 
 const InstructorElementDiv = styled.div`
     width: 100%;
@@ -24,6 +25,7 @@ const InstructorElement = (props) => {
         id: props.instructor._id
     })
     const [updatedMeta,setUpdatedMeta] = useState({})
+    const {storeAlert} = useContext(Context)
     const handleUpdatedMeta = (event,error) => {
         setUpdatedMeta({
             ...updatedMeta,
@@ -41,7 +43,7 @@ const InstructorElement = (props) => {
     }
 
     const enrollStudent = async () => {
-        let enrollData = await fetchData({
+        let enrollStudentDetails = await fetchData({
             method: "POST",
             url: "/student/selectInstructor",
             jwToken: user.jwToken,
@@ -50,7 +52,17 @@ const InstructorElement = (props) => {
                 instructorId: meta.id
             }
         })
-        console.log(enrollData)
+        if(enrollStudentDetails.status){
+            storeAlert({
+              status: true,
+              message: "STUDENT ENROLLED"
+            })
+        }else{
+            storeAlert({
+              status: false,
+              message: "FAILED TO ENROLL STUDENT"
+            })
+        }
     }
 
     return <InstructorElementDiv>

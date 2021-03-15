@@ -10,7 +10,6 @@ exports.getAllTask = async (req,res) => {
             errorCode=404;
             throw Error("student not found")
         }
-        console.log(studentDetail.student)
         let taskHashMapDetail = await ExtractTaskByStudent.extractTaskByStudent(studentDetail.student);
         if(taskHashMapDetail.status){
             res.status(200).json({
@@ -25,7 +24,6 @@ exports.getAllTask = async (req,res) => {
         }
 
     } catch (err) {
-        console.log(err)
         res.status(errorCode).json({
             errorText: err.message,
             status: false,

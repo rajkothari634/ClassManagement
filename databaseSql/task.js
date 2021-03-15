@@ -1,8 +1,6 @@
 const pg = require("../pg/pg");
 class Task {
   static async insert(instructor_id, imgUrl, explanation, level) {
-    console.log("inside task");
-    console.log(explanation + " " + instructor_id + " " + imgUrl + " " + level);
     const query = `INSERT INTO TASK (
             task_seq_no,
             task_id,
@@ -30,7 +28,6 @@ class Task {
       }
       throw Error("Task Creation Failed");
     } catch (err) {
-      console.log(err);
       return {
         status: false,
         err_code: err.message,

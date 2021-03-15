@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const envJson = require("dotenv").config();
 
-console.log(envJson.parsed.API_KEY);
+
 exports.createInstructor = async (req, res) => {
   try {
     if (

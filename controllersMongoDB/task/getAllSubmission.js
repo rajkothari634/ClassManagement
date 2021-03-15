@@ -6,7 +6,7 @@ exports.getAllSubmission = async (req,res) => {
         let taskId = req.query["taskId"];
         let submissionDetail = await Task.getAllSubmission(taskId);
         if(submissionDetail.status){
-            if(submissionDetail.instructorId!==mongoose.Types.ObjectId(req.query["id"])){
+            if(submissionDetail.instructorId.toString()!==req.query["id"]){
                 errorCode = 402;
                 throw Error("task is created by other instructor")
             }

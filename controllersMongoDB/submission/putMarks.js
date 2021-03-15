@@ -10,6 +10,7 @@ exports.putMarks = async (req,res) => {
             throw Error("requested body is wrong")
         }
         if(! (await validInstructor(body.submissionId,req.body.instructorId))){
+            errorCode = 402
             throw Error("Submission does not belong to your task");
         }
         const submissionDetail = await Submission.putMarks(body.submissionId,body.marks);
@@ -25,6 +26,7 @@ exports.putMarks = async (req,res) => {
             throw Error(submissionDetail.errorMessage)
         }
     } catch (err) {
+        console.log(err)
         res.status(errorCode).json({
             errorText: err.message,
             status: false,
@@ -38,7 +40,7 @@ const validInstructor = async (submissionId,instructorId) => {
         let taskId = submissionDetail.submission.taskId;
         const taskDetail = await getTaskById(taskId);
         if(taskDetail.status){
-            if(taskDetail.task.instructorId === mongoose.Types.ObjectId(instructorId)){
+            if(taskDetail.task.instructorId._id.toString() === instructorId){
                 return true
             }else{
                 return false

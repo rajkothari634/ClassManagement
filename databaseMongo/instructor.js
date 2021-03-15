@@ -23,8 +23,6 @@ const encodePassword = async (password) => {
     return await bcrypt.hash(password, 12);
 }
 const comparePassword = async (correctPassword,providedPassword) => {
-    console.log(correctPassword);
-    console.log(providedPassword)
     return await bcrypt.compare(providedPassword,correctPassword);
 }
 
@@ -33,14 +31,12 @@ exports.findInstructorById = async (data) => {
    
         let {id,fetchTaskDetail,fetchStudentDetail} = data;
         let instructor =  {}
-        console.log(id)
         if(fetchTaskDetail===0&&fetchStudentDetail==0){
             instructor = await Instructor.findById(id);
         }else{
             instructor = await Instructor.findById(id).populate("taskIds").populate("studentIds", '-password');
         }
         if(instructor){
-            console.log(instructor)
             return {
                 status: true,
                 instructor: instructor
@@ -154,12 +150,6 @@ exports.login = async (email,password) => {
         let passwordStatus = await comparePassword(instructor.password,password);
         if(passwordStatus){
             let jwToken = await CreateJWT.createJWToken({
-                email: instructor.email,
-                id: instructor._id,
-                role: "instructor"
-            })
-            console.log("vhvk")
-            console.log({
                 email: instructor.email,
                 id: instructor._id,
                 role: "instructor"

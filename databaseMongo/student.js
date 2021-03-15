@@ -22,9 +22,6 @@ const encodePassword = async (password) => {
     return await bcrypt.hash(password, 12);
 }
 const comparePassword = async (correctPassword,providedPassword) => {
-    console.log("checking")
-    console.log(providedPassword);
-    console.log(correctPassword);
     return await bcrypt.compare(providedPassword,correctPassword);
 }
 
@@ -32,6 +29,7 @@ const comparePassword = async (correctPassword,providedPassword) => {
 exports.findStudentById = async (id) => {
     try {
         const student = await Student.findById(id,"-password").populate("instructorIds","-password").populate("submissionIds");
+        
         if(student){
             return {
                 status: true,
@@ -124,7 +122,6 @@ exports.insertInstructorId  = async (studentId,instructorId) => {
         const updatedStudent = await Student.findByIdAndUpdate(studentId,{
             $addToSet: {instructorIds : instructorId}
         })
-        console.log(updatedStudent)
         if(updatedStudent){
             return {
                 status: true,

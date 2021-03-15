@@ -1,20 +1,20 @@
 import { Grid } from "@material-ui/core"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import {lightTheme} from "../constantManagement"
 import {Field,SelectField,SubmitButton} from "../globalElement"
 import {fetchData} from "../fetchData";
 import {setCookie,deleteCookie,getCookie} from "../cookie";
 import Router from "next/router";
+import { Context } from "../context/contextProvider";
 
 
 const Login = (props) => {
-    
-    console.log(props.role)
     const [meta,setMeta] = useState({
         role: props.role,
         email: "",
         password: ""
     })
+    const {storeAlert} = useContext(Context)
     const [validate, setValidate] = useState({
         email: false,
         password: false
@@ -49,7 +49,6 @@ const Login = (props) => {
               }
             }
         }
-        console.log("nbhji")
         setLoginButton(true);
     }
     const handleSubmission = async () => {
@@ -60,27 +59,27 @@ const Login = (props) => {
             body : meta
         })
         if(data.status){
-            console.log("entering in student task")
             insertCookie(data);
             if(data.role==="instructor"){
                 Router.push("instructor/allTask");
             }else{
-                console.log("entering in student task")
                 Router.push("student/allTask");
             }
         }else{
             //show error
+            storeAlert({
+                status: false,
+                message: "LOGIN FAILED"
+            })
         }
         setLoading(false)
     }
     const insertCookie = (data) => {
-        console.log("njio")
         setCookie("jwToken",data.jwToken,1);
         setCookie("name",data.name,1);
         setCookie("role",data.role,1);
         setCookie("email",data.email,1);
         setCookie("id",data.id,1)
-        console.log("qwer")
     }
     return <Grid container spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12} >

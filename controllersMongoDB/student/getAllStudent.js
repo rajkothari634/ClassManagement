@@ -5,7 +5,6 @@ exports.getAllStudent = async (req,res) => {
     try {
         const query = req.body;
         const queryObject = extractQueryObject(query);
-        console.log(queryObject)
         const studentArrayDetails = await Student.findStudent(queryObject);
         if(studentArrayDetails.status){
             res.status(200).json({

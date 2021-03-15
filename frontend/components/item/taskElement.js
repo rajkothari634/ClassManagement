@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 
 import Grid from "@material-ui/core/Grid";
 import { lightTheme, LevelLabel } from "../constantManagement";
 import {DisabledText, StyledLink, Field,SelectField} from "../globalElement"
 import { fetchData } from "../fetchData";
+import { Context } from "../context/contextProvider";
 
 const TaskElementDiv = styled.div`
     width: 100%;
@@ -28,14 +29,10 @@ const TaskElement = (props) => {
         level: props.task.level,
         explanation: props.task.explanation
     })
+    const {storeAlert} = useContext(Context)
     const [updatedMeta,setUpdatedMeta] = useState({})
     const handleUpdatedMeta = (event,error) => {
         setUpdatedMeta({
-            ...updatedMeta,
-            [event.target.id]:event.target.value
-        })
-        console.log("updated handle meta")
-        console.log({
             ...updatedMeta,
             [event.target.id]:event.target.value
         })
@@ -79,6 +76,15 @@ const TaskElement = (props) => {
                 udpatedObject["imageUrl"] = updateTaskDetails.data.updatedTask.imageUrl;
             }
             setMeta(udpatedObject)
+            storeAlert({
+                status: true,
+                message: "TASK UPDATED"
+            })
+        }else{
+            storeAlert({
+                status: true,
+                message: "UPDATE FAIL"
+            })
         }
         setLoading(false)
     }

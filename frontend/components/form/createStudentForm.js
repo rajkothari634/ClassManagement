@@ -3,6 +3,8 @@ import {Field, SubmitButton} from "../globalElement";
 import {lightTheme} from "../constantManagement"
 import { useState, useContext } from "react";
 import {fetchData} from "../fetchData"
+import { Router } from "next/router";
+import { Context } from "../context/contextProvider";
 
 const CreateStudentForm = (props) => {
     const [meta,setMeta] = useState({
@@ -10,6 +12,7 @@ const CreateStudentForm = (props) => {
         password: "",
         email: ""
     });
+    const {storeAlert} = useContext(Context)
     const [loading, setLoading] = useState(false);
     const [validate, setValidate] = useState({
         studentName: false,
@@ -18,7 +21,6 @@ const CreateStudentForm = (props) => {
     });
     const [createButton, setCreateButton] = useState(false);
     const handleMeta = (event, error) => {
-        // console.log(subProductNumber);
         setMeta({
           ...meta,
           [event.target.id]: event.target.value,
@@ -43,16 +45,21 @@ const CreateStudentForm = (props) => {
     };
     const handleSubmission = async () => {
       setLoading(true);
-      console.log(meta)
-      let data = await fetchData({
+      let studentDetails = await fetchData({
           method : "POST",
           url : "/student/createStudent",
           jwToken : "",
           body : meta
       })
+      if(studentDetails.status){
+        Router.push("student/allTask");
+      }else{
+        storeAlert({
+          status: false,
+          message: "LOGIN FAILED"
+        })
+      }
       setLoading(false)
-      console.log("checking in case of output")
-      console.log(data)
     }
     return <Grid container spacing={3}>
         <Grid item lg={12} md={12} sm={12} xs={12}>

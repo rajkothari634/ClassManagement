@@ -35,7 +35,6 @@ exports.selectInstructor = async (req,res) => {
             throw Error("Error in inserting ")
         }
     } catch (err) {
-        console.log(err)
         res.status(errorCode).json({
             errorText: err.message,
             status: false,

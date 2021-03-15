@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import {fetchData} from "../fetchData"
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";
 import { lightTheme} from "../constantManagement";
 import {StyledLink, Field, SelectField} from "../globalElement"
+import { Context } from "../context/contextProvider";
 
 const SubmissionElement = (props) => {
     const [meta,setMeta] = useState({
@@ -24,6 +25,7 @@ const SubmissionElement = (props) => {
             marks: event.target.value
         });
     }
+    const {storeAlert} = useContext(Context)
     const [loading,setLoading] = useState(false);
     const [editMode,setEditMode] = useState(false);
     const [evaluationMode,setEvaluationMode] = useState(false);
@@ -58,6 +60,15 @@ const SubmissionElement = (props) => {
                 ...meta,
                 imageUrl: updateSubmissionDetails.data.updatedSubmission.imageUrl
             })
+            storeAlert({
+                status: true,
+                message: "SUBMISSION UPDATED"
+            })
+        }else{
+            storeAlert({
+                status: false,
+                message: "SUBMISSION UPDATION FAILED"
+            })
         }
         setLoading(false)
     }
@@ -81,6 +92,15 @@ const SubmissionElement = (props) => {
             setMeta({
                 ...meta,
                 marks: updateSubmissionMarksDetails.data.marks
+            })
+            storeAlert({
+                status: true,
+                message: "MARKS UPDATED"
+            })
+        }else{
+            storeAlert({
+                status: false,
+                message: "UPDATED FAILED"
             })
         }
         console.log(updateSubmissionMarksDetails)

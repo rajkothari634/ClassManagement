@@ -15,7 +15,7 @@ const CreateSubmissionDiv = styled.div`
 const CreateSubmission = (props) => {
     const user = props.user;
     const task = props.task;
-    const {storeTasks} = useContext(Context)
+    const {storeTasks,storeAlert} = useContext(Context)
     const [loading,setLoading] = useState(false);
     const createSubmission = async () => {
         if(loading){
@@ -34,8 +34,15 @@ const CreateSubmission = (props) => {
         })
         if(createSubmissionDetails.status){
             storeTasks();
+            storeAlert({
+                status: true,
+                message: "SUBMISSION CREATED SUCCESSFULLY"
+            })
         }else{
-            // console.log("fail to store")
+            storeAlert({
+              status: false,
+              message: "FAILED TO CREATE SUBMISSION"
+            })
         }
         setLoading(false)
     }

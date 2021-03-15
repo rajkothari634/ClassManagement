@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import { lightTheme, LevelLabel } from "../constantManagement";
 import {DisabledText, StyledLink, Field,SelectField} from "../globalElement"
 import { fetchData } from "../fetchData";
+import { Router } from "next/router";
 
 const StudentElementDiv = styled.div`
     width: 100%;
@@ -33,7 +34,7 @@ const StudentElement = (props) => {
     let user = props.user;
     const isInstructor = user.role === "instructor" ? true : false;
     const viewSubmission = () => {
-
+        Router.push("/instructor/allSubmission")
     }
 
     return <StudentElementDiv>

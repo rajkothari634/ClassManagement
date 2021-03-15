@@ -4,15 +4,13 @@ import { deleteCookie, getCookie } from "../cookie";
 import Router from "next/router"
 export const Context = createContext();
 
-
-
 const ContextProvider = (props) => {
     const [user,setUser] = useState({});
     const [tasks,setTasks] = useState([]);
     const [instructors,setInstructors] = useState([]);
     const [students,setStudents] = useState([]);
     const [submissions,setSubmissions] = useState([]);
-
+    const [alert,setAlert] = useState({})
     const storeUser = () => {
         if (!user.email || !user.role || !user.jwToken) {
             let {email,role,jwToken,name,id} = getUserCredential();
@@ -40,7 +38,8 @@ const ContextProvider = (props) => {
               return user;
         }
     }
-    const storeTasks = async () => {    
+    const storeTasks = async () => {
+      storeAlert({})
       let userData = user; 
       if(userData.jwToken===undefined || userData.jwToken === null || userData.id===undefined || userData.id === null){
         storeUser();
@@ -73,9 +72,15 @@ const ContextProvider = (props) => {
           }
           setTasks(fetchedTasksDetail.data.taskArray)
         }
+      }else{
+        storeAlert({
+          status: false,
+          message: "FAILED TO GET TASKS"
+        })
       }
     }
     const storeInstructors = async () => {
+      storeAlert({})
       let userData = user;
       if(user.jwToken===undefined || user.jwToken === null || user.id===undefined || user.id === null){
         storeUser();
@@ -92,9 +97,15 @@ const ContextProvider = (props) => {
       if(fetchedInstructorsDetail.status){
         let instructorArray = fetchedInstructorsDetail.data.instructorArray;
         setInstructors(instructorArray)
+      }else{
+        storeAlert({
+          status: false,
+          message: "FAILED TO GET INSTRUCTORS"
+        })
       }
     }
     const storeStudents = async () => {
+      storeAlert({})
       let userData = user; 
       if(userData.jwToken===undefined || userData.jwToken === null || userData.id===undefined || userData.id === null){
         storeUser();
@@ -111,10 +122,16 @@ const ContextProvider = (props) => {
       if(fetchedStudentsDetail.status){
         let studentArray = fetchedStudentsDetail.data.studentArray;
         setStudents(studentArray);
+      }else{
+        storeAlert({
+          status: false,
+          message: "FAILED TO GET STUDENTS"
+        })
       }
 
     }
     const storeSubmissions = async () => {
+      storeAlert({})
       let userData = user; 
       if(userData.jwToken===undefined || userData.jwToken === null || userData.id===undefined || userData.id === null){
         storeUser();
@@ -134,6 +151,11 @@ const ContextProvider = (props) => {
         }
         let submissionArray = fetchedSubmissionsDetail.data.submissionArray;
         setSubmissions(submissionArray);
+      }else{
+        storeAlert({
+          status: false,
+          message: "FAILED TO GET SUBMISSION"
+        })
       }
     }
     const clearData = async () => {
@@ -149,7 +171,13 @@ const ContextProvider = (props) => {
       setSubmissions([]);
 
     }
-    return <Context.Provider value={{user, storeUser, tasks, storeTasks, instructors, storeInstructors, students, storeStudents, submissions, storeSubmissions, clearData}}>
+    const storeAlert = async (data) => {
+      setAlert({
+        ...data
+      })
+    }
+    return <Context.Provider value={{user, storeUser, tasks, storeTasks, instructors, storeInstructors, 
+              students, storeStudents, submissions, storeSubmissions, alert, storeAlert, clearData}}>
         {props.children}
     </Context.Provider>
 }

@@ -17,7 +17,6 @@ const fetchData = async (data) => {
     if(method!=="FORM"&&method!=="GET"){
       requestOptions.headers["Content-Type"] = "application/json"
     }
-
     if(method === "POST" || method==="FORM"){
       if(method==="POST"){
         requestOptions["body"] = JSON.stringify(body)
@@ -31,9 +30,6 @@ const fetchData = async (data) => {
         }
         url = url.substring(0,url.length-1);
     }
-      //url = /user/createUser
-      console.log(url)
-      console.log(body)
     return await fetch(`${API}${url}`, requestOptions)
         .then(async (response) => {
           if(response.status == 200){

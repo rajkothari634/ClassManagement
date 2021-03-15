@@ -12,12 +12,16 @@ const CreateTaskDiv = styled.div`
     border-radius: 4px;
     background-color: ${lightTheme.dark};
 `
+const DisabledText = styled.p`
+  color: ${lightTheme.disabled};
+  font-size: 0.8em;
+`
 const CreateTask = (props) => {
     const user = props.user;
     const [meta,setMeta] = useState({
         level: "Beginner"
     });
-    const {storeTasks} = useContext(Context)
+    const {storeTasks,storeAlert} = useContext(Context)
     const [loading,setLoading] = useState(false);
     const handleMeta = (event,error) => {
         setMeta({
@@ -47,6 +51,11 @@ const CreateTask = (props) => {
             setLoading(true)
         }
         if(!isValid()){
+            setLoading(false)
+            storeAlert({
+              status: false,
+              message: "INVALID TASK DATA"
+            })
             return 
         }
         let formData = new FormData(document.getElementById("createTaskForm"));
@@ -64,10 +73,20 @@ const CreateTask = (props) => {
         if(createTaskDetails.status){
             storeTasks();
             setMeta({
-                level: "Beginner"
+                level: "Beginner",
+                taskName:"",
+                endDate:Date.now(),
+                explanation: ""
+            })
+            storeAlert({
+                status: true,
+                message: "TASK CREATED SUCCESSFULLY"
             })
         }else{
-            console.log("fail to store")
+            storeAlert({
+              status: false,
+              message: "FAILED TO CREATE TASK"
+            })
         }
         setLoading(false)
     }
@@ -115,9 +134,9 @@ const CreateTask = (props) => {
             </Grid>
             
             <Grid item lg={2} md={2} sm={3} xs={3}>
-                <StyledLink color={lightTheme.blue} onClick={createTask}>
-                    {loading ? "Creating.." : "Create Task"}
-                </StyledLink>
+                {!loading ? <StyledLink color={lightTheme.blue} onClick={createTask}>
+                    Create Task
+                </StyledLink> : <DisabledText>Creating..</DisabledText>}
             </Grid>
             
             <Grid item lg={12} md={12} sm={12} xs={12}>

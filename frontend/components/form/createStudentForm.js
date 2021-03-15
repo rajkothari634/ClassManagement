@@ -3,6 +3,8 @@ import {Field, SubmitButton} from "../globalElement";
 import {lightTheme} from "../constantManagement"
 import { useState, useContext } from "react";
 import {fetchData} from "../fetchData"
+import { Router } from "next/router";
+import { Context } from "../context/contextProvider";
 
 const CreateStudentForm = (props) => {
     const [meta,setMeta] = useState({
@@ -10,6 +12,7 @@ const CreateStudentForm = (props) => {
         password: "",
         email: ""
     });
+    const {storeAlert} = useContext(Context)
     const [loading, setLoading] = useState(false);
     const [validate, setValidate] = useState({
         studentName: false,
@@ -42,12 +45,20 @@ const CreateStudentForm = (props) => {
     };
     const handleSubmission = async () => {
       setLoading(true);
-      let data = await fetchData({
+      let studentDetails = await fetchData({
           method : "POST",
           url : "/student/createStudent",
           jwToken : "",
           body : meta
       })
+      if(studentDetails.status){
+        Router.push("student/allTask");
+      }else{
+        storeAlert({
+          status: false,
+          message: "LOGIN FAILED"
+        })
+      }
       setLoading(false)
     }
     return <Grid container spacing={3}>

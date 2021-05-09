@@ -12,7 +12,7 @@ exports.updateTask = async (req,res) => {
         }
         if(!validInstructor(body.taskId,body.instructorId)){
             errorCode = 402;
-            throw Error("correct student access is required")
+            throw Error("correct instructor access is required")
         }
         let updatingbody = await validObject(req.body,req.file);
         const result = await Task.updateTask(taskId,updatingbody);

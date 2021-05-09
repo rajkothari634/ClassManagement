@@ -1,219 +1,1228 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Class Management
+  description: management system of student and teacher task.
+tags:
+  - name: Student
+  - name: Instructor
+  - name: Task
+  - name: Submission
+  # Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/rajkothari634/InventoryManagement/1.0.0
 paths:
-  /createstudent:
-    post:
-      parameter:
-        - in: body
-          name: student_id
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: name
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: instructor_id
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: level
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: password
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: success
-        "400":
-          description: failure
-  /createinstructor:
-    post:
-      parameter:
-        - in: body
-          name: instructor_id
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: name
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: level
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: password
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: success
-        "400":
-          description: failure
-  /getAllTask:
-    get:
-      parameter:
-        - in: query
-          name: level
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: instructor_id
-          required: false
-          schema:
-            type: string
-      responses:
-        "200":
-          description: success
-        "400":
-          description: failure
-  /createtask:
-    post:
-      parameter:
-        - in: form-data
-          name: image
-          required: true
-          schema:
-            type: file
-        - in: form-data
-          name: instructor_id
-          required: false
-          schema:
-            type: string
-        - in: form-data
-          name: explanation
-          required: true
-          schema:
-            type: string
-        - in: form-data
-          name: level
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: success
-        "400":
-          description: failure
-  /submitTask:
-    post:
-      parameter:
-        - in: form-data
-          name: image
-          required: true
-          schema:
-            type: file
-        - in: form-data
-          name: task_id
-          required: true
-          schema:
-            type: string
-        - in: form-data
-          name: student_id
-          required: false
-          schema:
-            type: string
-      responses:
-        "200":
-          description: success
-        "400":
-          description: failure
-  /stuTaskPerformance:
-    post:
-      parameter:
-        - in: body
-          name: task_id
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: instructor_id
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: success
-        "400":
-          description: failure
-  /putGrade:
-    post:
-      parameter:
-        - in: body
-          name: student_id
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: marks
-          required: true
-          schema:
-            type: integer
-        - in: body
-          name: task_id
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: instructor_id
-          required: false
-          schema:
-            type: string
-      responses:
-        "200":
-          description: success
-        "400":
-          description: failure
-  /getGrade:
-    get:
-      parameter:
-        - in: query
-          name: studentId
-          required: false
-          schema:
-            type: string
-      responses:
-        "200":
-          description: success
-        "400":
-          description: failure
   /login:
     post:
-      parameter:
-        - in: body
-          name: type
-          required: true
-          schema:
-            type: string
-        - in: body
-          name: password
-          required: true
-          schema:
-            type: string
-        - in: body
+      tags:
+        - Student
+        - Instructor
+      operationId: userLogin
+      description: login of student and instructor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/loginRequest"
+        description: login info of user
+      responses:
+        "200":
+          description: login successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/loginResponse"
+        "400":
+          description: Bad Request. Fields missing.
+        "404":
+          description: User not found
+        "5XX":
+          description: Unexpected error
+  /student/createStudent:
+    post:
+      tags:
+        - Student
+      operationId: createStudent
+      description: Creation od student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createStudentRequest"
+        description: creation of student
+      responses:
+        "200":
+          description: creation of student is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createStudentResponse"
+        "400":
+          description: requested body is not valid
+        "5XX":
+          description: Unexpected error
+  /student/selectInstructor:
+    post:
+      tags:
+        - Student
+      operationId: selectInstructor
+      description: register instructor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/selectInstructorRequest"
+        description: register instructor to get the task created by the instructor
+      responses:
+        "200":
+          description: selection of instructor is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/selectInstructorResponse"
+        "201":
+          description: selection of instructor is successfull but instructor is not updated.
+          content: 
+            application/json:
+              schema:
+                $ref: ""
+        "402":
+          description: Instructor not found
+        "5XX":
+          description: Unexpected error
+  /student/getAllStudent:
+    post:
+      tags:
+        - Student
+      operationId: getAllStudentByStudent
+      description: get all student asked by student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getAllStudentByStudentRequest"
+        description: post request to get all student
+      responses:
+        "200":
+          description: all students
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllStudentByStudentResponse"
+        "5XX":
+          description: Unexpected error
+  /student/getAllTask/{id}:
+    get:
+      parameters:
+        - in: path
           name: id
           required: true
           schema:
             type: string
+      tags:
+        - Student
+      operationId: getAllTaskByStudent
+      description: get all task of student
       responses:
         "200":
-          description: success
+          description: all task of student
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllTaskByStudentResponse"
+        "404":
+          description: student not found
+        "5XX":
+          description: Unexpected error
+  /student/getStudent/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      tags:
+        - Student
+      operationId: getStudentByStudent
+      description: get all task of student 
+      responses:
+        "200":
+          description: student information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getStudentByStudentResponse"
         "400":
-          description: failure
+          description: Fields are missing.
+        "5XX":
+          description: Unexpected error
+  /student/getAllSubmission/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      tags:
+        - Student
+      operationId: getAllSubmissionByStudent
+      description: all Submission by student
+      responses:
+        "200":
+          description: submission information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllSubmissionByStudentResponse"
+        "5XX":
+          description: Unexpected error
+  /student/getAllInstructor/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      tags:
+        - Student
+      operationId: getAllInstructorByStudent
+      description: all instructor register by student
+      responses:
+        "200":
+          description: instructor information
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllInstructorByStudentResponse"
+        "5XX":
+          description: Unexpected error
+  /instructor/createInstructor:
+    post:
+      tags:
+        - Instructor
+      operationId: createInstructor
+      description: Creation of instructor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createInstructorRequest"
+        description: creation of instructor
+      responses:
+        "200":
+          description: creation of instructor is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createInstructorResponse"
+        "400":
+          description: requested body is not valid
+        "5XX":
+          description: Unexpected error
+  /instructor/getAllInstructor:
+    post:
+      tags:
+        - Instructor
+      operationId: getAllInstructorByInstructor
+      description: get all instructor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getAllInstructorByInstructorRequest"
+        description: get all instructor
+      responses:
+        "200":
+          description: instructor fetching is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllInstructorByInstructorResponse"
+        "5XX":
+          description: Unexpected error
+  /instructor/getAllTask/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      tags:
+        - Instructor
+      operationId: getAllTaskByInstructor
+      description: all task created by instructor will be fetched
+      responses:   
+        "200":
+          description: task fetching is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllTaskByInstructorResponse"
+        "404":
+          description: error in fetching task of instructor
+        "5XX":
+          description: Unexpected error
+  /instructor/getAllStudent/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      tags:
+        - Instructor
+      operationId: getAllStudentByInstructor
+      description: all students registered to the instructor
+      responses:   
+        "200":
+          description: student fetching is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllStudentByInstructorResponse"
+        "403":
+          description: error in fetching task of instructor
+        "5XX":
+          description: Unexpected error
+  /instructor/getInstructor/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      tags:
+        - Instructor
+      operationId: getInstructorByInstructor
+      description: get instructor information
+      responses:   
+        "200":
+          description: instructor fetching is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getInstructorByInstructorResponse"
+        "403":
+          description: error in fetching task of instructor
+        "5XX":
+          description: Unexpected error
+  /instructor/getAllSubmission/{id}:
+    get:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      tags:
+        - Instructor
+      operationId: getAllSubmissionByInstructor
+      description: get all submission submitted by students at instructor task
+      responses:   
+        "200":
+          description: submission fetching is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllSubmissionByInstructorResponse"
+        "403":
+          description: error in fetching submission of instructor
+        "5XX":
+          description: Unexpected error
+  /task/createTask:
+    post:
+      tags:
+        - Task
+      operationId: createTask
+      description: creating task by instructor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createTaskRequest"
+        description: creation of task
+      responses:
+        "200":
+          description: creation of task is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createTaskResponse"
+        "400":
+          description: requested body is not valid
+        "5XX":
+          description: Unexpected error
+  /task/updateTask:
+    post:
+      tags:
+        - Task
+      operationId: updateTask     
+      description: updating of task by instructor
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateTaskRequest"
+        description: creation of student
+      responses:
+        "200":
+          description: updation of task is successfull
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/updateTaskResponse"
+        "400":
+          description: Provide task Id
+        "402":
+          description: correct instructor access is required
+        "5XX":
+          description: Unexpected error
+  /task/getAllTask:
+    post:
+      tags:
+        - Task
+      operationId: getAllTask
+      description: get all task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getAllTaskRequest"
+        description: get all task by queries
+      responses:
+        "200":
+          description: all task fetched according to query.
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllTaskResponse"
+        "500":
+          description: Unexpected error
+  /task/getAllSubmission/{taskId}:
+    get:
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: string
+      tags:
+        - Task
+      operationId: getAllSubmissionByTask
+      description: get all submission of task
+      responses:
+        "200":
+          description: all submission of task
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getAllSubmissionByTaskByResponse"
+        "400":
+          description: submission doent exist
+        "402":
+          description: task is created by other instructor
+        "5XX":
+          description: Unexpected error
+  /task/getTask/{taskId}:
+    get:
+      parameters:
+        - in: path
+          name: taskId
+          required: true
+          schema:
+            type: string
+      tags:
+        - Task 
+      operationId: getTask
+      description: get task information
+      responses:
+        "200":
+          description: get task information
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getTaskResponse"
+        "400":
+          description: fields are missing
+        "402":
+          description: task is created by other instructor
+        "5XX":
+          description: Unexpected error
+  /submission/createSubmission:
+    post:
+      tags:
+        - Submission
+      operationId: createSubmission
+      description: create submission for a task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createSubmissionRequest"
+        description: submission for task
+      responses:
+        "200":
+          description: submission for task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/createSubmissionResponse"
+        "400":
+          description: requested body is not valid
+        "5XX":
+          description: Unexpected error
+  /submission/updateSubmission:
+    post:
+      tags:
+        - Submission
+      operationId: updateSubmission
+      description: updation of submission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateSubmissionRequest"
+      responses:
+        "200":
+          description: updation of submission
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/updateSubmissionResponse"
+        "400":
+          description: requested field are incorrect
+        "402":
+          description: correct student access is required
+        "5XX":
+          description: Unexpected error
+  /submission/putMarks:
+    post:
+      tags:
+        - Submission
+      operationId: putMarks
+      description: gice marks to submission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/putMarksRequest"
+      responses:
+        "200":
+          description: marks given successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/putMarksResponse" 
+        "400":
+          description: requested body is wrong
+        "402":
+          description: Submission does not belong to your task
+        "5XX":
+          description: Unexpected error
+  /submission/getSubmission/{submissionId}:
+    get:
+      parameters:
+        - in: path
+          name: submissionId
+          required: true
+          schema:
+            type: string
+      tags:
+        - Submission
+      operationId: getSubmissionByInstructor
+      description: get submission by submission Id
+      responses:
+        "200":
+          description: get submission
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/getSubmissionResponse"
+        "400":
+          description: fields are missing
+        "402":
+          description: submission does not belong to student
+        "5XX":
+          description: Unexpected error
 
-errorResponse:
-  status: 400
-  parameter:
-    req_result: 400
-    err_text: describing the error whatever it is
+components:
+  schemas:
+    loginRequest:
+      type: object
+      required:
+        - email
+        - password
+        - role
+      properties:
+        email:
+          type: string
+          example: email of user
+        password:
+          type: string
+          example: password of user
+        role:
+          type: string
+          example: instructor OR student
+    loginResponse:
+      type: object
+      required:
+        - status
+        - id
+        - role
+        - name
+        - email
+        - jwToken
+      properties:
+        status:
+          type: boolean
+          example: true
+        id: 
+          type: string
+          example: id of user
+        role:
+          type: string
+          example: instructor OR student
+        name: 
+          type: string
+          example: name of user
+        email: 
+          type: string
+          example: email of user
+        jwToken: 
+          type: string
+          example: token for user access
+    createStudentRequest:
+      type: object
+      required:
+        - studentName
+        - email
+        - password
+      properties:
+        studentName:
+          type: string
+          example: name of student
+        email:
+          type: string
+          example: email of user
+        password:
+          type: string
+          example: password of user
+    createStudentResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - student
+          properties:
+            student:
+              type: object
+              required:
+                - id
+                - studentName
+                - email
+                - jwToken
+              properties:
+                id:
+                  type: string
+                  example: id of student
+                studentName:
+                  type: string
+                  example: name of student
+                email:
+                  type: string
+                  example: email of user
+                jwToken:
+                  type: string
+                  example: token to provide access to user
+    selectInstructorRequest:
+      type: object
+      required:
+        - instructorId
+        - studentId
+      properties:
+        instructorId:
+          type: string
+          example: id of instructor
+        studentId:
+          type: string
+          example: id of student
+    selectInstructorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          required:
+            - insertedInstructorId
+          properties:
+            insertedInstructorId:
+              type: string
+              example: id of inserted instructor
+    getAllStudentByStudentRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: xyz@gmail.com
+        instructorName:
+          type: string
+          example: instructor name
+        taskIds: 
+          type: array
+          items:
+            type: string
+          example: ["id of task one", "id of task 2"]
+    getAllStudentByStudentResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          required:
+            - studentArray
+          properties:
+            studentArray:
+              type: array
+              items:
+                type: object
+              example: {
+                "id":"vkfvfb",
+                "studentName": "vfbgb"
+              }
+    getAllTaskByStudentResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          required:
+            - taskHashMap
+          properties:
+            taskHashMap:
+              type: object
+              example: {
+                "idOfTask":"object of task"
+              }
+    getStudentByStudentResponse:
+      type: object
+      required: 
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data: 
+          type: object
+          required: 
+            - student
+          properties:
+            student:
+              type: object
+              example: {
+                "id": "details of student"
+              }
+    getAllSubmissionByStudentResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data: 
+          type: object
+          required: 
+            - submissionArray
+          properties:
+            submissionArray:
+              type: array
+              items: 
+                type: object
+    getAllInstructorByStudentResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data: 
+          type: object
+          required: 
+            - instructorArray
+          properties:
+            instructorArray:
+              type: array
+              items: 
+                type: object
+    createInstructorRequest:
+      type: object
+      required:
+        - instructorName
+        - email
+        - password
+      properties:
+        instructorName:
+          type: string
+          example: name of instructor
+        email:
+          type: string
+          example: email of user
+        password:
+          type: string
+          example: password of user
+    createInstructorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - instructor
+          properties:
+            instructor:
+              type: object
+              required:
+                - id
+                - instructorName
+                - email
+                - jwToken
+              properties:
+                id:
+                  type: string
+                  example: id of instructor
+                instructorName:
+                  type: string
+                  example: name of instructor
+                email:
+                  type: string
+                  example: email of user
+                jwToken:
+                  type: string
+                  example: token to provide access to user
+    getAllInstructorByInstructorRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: xyz@gmail.com
+        instructorName:
+          type: string
+          example: instructor name
+        taskIds: 
+          type: array
+          items:
+            type: string
+          example: ["id of task one", "id of task 2"]
+        studentIds: 
+          type: array
+          items:
+            type: string
+          example: ["id of student one", "id of student 2"]
+    getAllInstructorByInstructorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data:
+          type: object
+          required:
+            - instructorArray
+          properties:
+            instructorArray:
+              type: array
+              items:
+                type: object
+              example: {
+                "id":"vkfvfb",
+                "studentName": "vfbgb"
+              }
+    getAllTaskByInstructorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data: 
+          type: object
+          required: 
+            - taskArray
+          properties:
+            taskArray:
+              type: array
+              items: 
+                type: object
+    getAllStudentByInstructorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data: 
+          type: object
+          required: 
+            - studentArray
+          properties:
+           studentArray:
+              type: array
+              items: 
+                type: object
+    getInstructorByInstructorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data: 
+          type: object
+          required: 
+            - instructor
+          properties:
+           instructor:
+              type: object
+              example: {
+                "id": instructorId,
+                "name": name of instructor
+              }
+    getAllSubmissionByInstructorResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status:
+          type: boolean
+          example: true
+        data: 
+          type: object
+          required: 
+            - submissionArray
+          properties:
+           submissionArray:
+              type: array
+              items: 
+                type: object
+    createTaskRequest:
+      type: object
+      required:
+        - instructorId
+        - taskName
+        - level
+        - endDate
+        - explanation
+        - image
+      properties:
+        instructorId:
+          type: string
+          example: idOfInstructor
+        taskName:
+          type: string
+          example: name of instructor
+        level:
+          type: string
+          example: advance
+        endDate:
+          type: date
+          example: 03/05/2015
+        explanation:
+          type: string
+          example: compllete explanation of the task
+        image:
+          type: file
+    createTaskResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - task
+          properties:
+            task:
+              type: object
+    updateTaskRequest:
+      type: object
+      required:
+        - taskId
+      properties:
+        taskId:
+          type: string
+          example: "idOfTask"
+        taskName:
+          type: string
+          example: name of instructor
+        level:
+          type: string
+          example: advance
+        endDate:
+          type: date
+          example: 03/05/2015
+        explanation:
+          type: string
+          example: compllete explanation of the task
+        image:
+          type: file
+    updateTaskResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - updatedTask
+          properties:
+            updatedTask:
+              type: object
+    getAllTaskRequest:
+      type: object
+      properties:
+        taskIds:
+          type: array
+          items:
+            type: string
+          example: ["id of task one", "id of task 2"]
+        studentIds:
+          type: array
+          items:
+            type: string
+          example: ["id of student 1", "id of student 2"]
+    getAllTaskResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - taskArray
+          properties:
+            taskArray:
+              type: object
+    getAllSubmissionByTaskByResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - submissionArray
+          properties:
+            submissionArray:
+              type: object
+    getTaskResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - task
+          properties:
+            task:
+              type: object
+    createSubmissionRequest:
+      type: object
+      required:
+        - studentId
+        - taskId
+        - image
+      properties:
+        studentId:
+          type: string
+          example: id of student
+        taskId:
+          type: string
+          example: id of task
+        image:
+          type: object
+    createSubmissionResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - submission
+          properties:
+            submission:
+              type: object
+    updateSubmissionRequest:
+      type: object
+      properties:
+        image:
+          type: object
+    updateSubmissionResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - updatedSubmission
+          properties:
+            updatedSubmission:
+              type: object
+    putMarksRequest:
+      type: object
+      required:
+        - submissionId
+        - marks
+      properties:
+        marks:
+          type: number
+          example: 9
+        submissionId:
+          type: string
+          example: id of submission
+    putMarksResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - submissionId
+            - marks
+          properties:
+            submissionId:
+              type: string
+              example: id of submission
+            marks: 
+              type: number
+              example: 9
+    getSubmissionResponse:
+      type: object
+      required:
+        - status
+        - data
+      properties:
+        status: 
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: 
+            - submission
+          properties:
+            submission:
+              type: object
+
+        
+
+
+
+        
+        
+      
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+

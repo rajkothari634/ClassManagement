@@ -14,6 +14,7 @@ exports.getAllStudent = async (req,res) => {
                 }
             })
         }else{
+            errorCode = 403;
             throw Error(instructorDetail.errorMessage)
         }
         
